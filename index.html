@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0a1628">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Géomancie">
+<title>Géomancie — Tracé et interprétation</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1d4ed8">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{--bg:#0a1628;--card:#122240;--ink:#e6efff;--mut:#9db1d8;--sand:#1a2d52;--acc:#3b82f6;--acc2:#0ea5e9;--gold:#f5b301;--line:#22396a;--ok:#4ade80;--ko:#ff8a80;--ne:#fbbf24;--sh:0 4px 14px rgba(0,0,0,.4)}
+:root[data-theme="light"]{--bg:#eaf2ff;--card:#ffffff;--ink:#0d1b3a;--mut:#5a6b8c;--sand:#dce9fb;--acc:#1d4ed8;--acc2:#0ea5e9;--gold:#f5b301;--line:#c5d6f2;--ok:#15803d;--ko:#c62828;--ne:#b7791f;--sh:0 4px 14px rgba(29,78,216,.10)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:linear-gradient(180deg,#0a1628,#0d1f3a 50%,#0a1628);color:var(--ink);font:15px/1.5 'Segoe UI',system-ui,-apple-system,Roboto,'Helvetica Neue',Arial,sans-serif;padding:14px;width:100%;min-height:100vh;transition:background .25s,color .25s}
+:root[data-theme="light"] body{background:linear-gradient(180deg,#eaf2ff,#dce9fb 50%,#eaf2ff)}
+.wrap{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:1000px){
+  .wrap{grid-template-columns:repeat(12,1fr);gap:16px;padding:0 8px}
+  .col-4{grid-column:span 4}.col-6{grid-column:span 6}.col-12{grid-column:span 12}
+  body{padding:20px}
+  h1{font-size:26px}
+}
+.hero{background:linear-gradient(135deg,#0b1f5c 0%,#1d4ed8 55%,#0ea5e9 100%);color:#fff;border-radius:16px;padding:16px;box-shadow:var(--sh);border-bottom:4px solid var(--gold);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.hero-txt{flex:1 1 260px}
+h1{font-size:22px;margin:0 0 4px;font-weight:800;letter-spacing:.3px}
+.sub{color:#dbeafe;font-size:13px;margin:0}
+h2{font-size:16px;margin:0 0 10px;color:var(--acc);font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h2::before{content:"";width:5px;height:18px;border-radius:3px;background:linear-gradient(var(--acc),var(--acc2))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--sh)}
+select,input[type=date],input[type=number],input[type=file],input[type=text],textarea{font:inherit;padding:9px 11px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);max-width:100%}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(59,130,246,.25)}
+textarea{width:100%;margin-bottom:8px}
+input[type=number]{width:74px}
+button{font:inherit;font-weight:600;padding:9px 14px;border-radius:10px;border:0;cursor:pointer;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 2px 6px rgba(29,78,216,.3)}
+button:active{transform:scale(.97)}
+button.g{background:transparent;color:var(--acc);border:1.5px solid var(--acc);box-shadow:none}
+button.danger{background:linear-gradient(135deg,#c62828,#ef4444)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#sand{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.hd{font-size:12px;color:var(--acc);font-weight:700;text-align:center}
+.cell{position:relative;aspect-ratio:1;background:linear-gradient(145deg,var(--sand),var(--card));border:1.5px solid var(--line);border-radius:10px;cursor:crosshair;overflow:hidden;user-select:none;touch-action:manipulation}
+.cell:hover{border-color:var(--acc2)}
+.dot{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.cn{position:absolute;right:5px;bottom:2px;font-size:11px;font-weight:700;color:var(--mut)}
+.names{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;text-align:center;font-size:12px;font-weight:600;color:var(--acc)}
+svg.f{display:block;margin:auto}
+.h12{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.hc{border:1px solid var(--line);border-radius:10px;padding:5px 2px;text-align:center;font-size:11px;background:var(--card);font-weight:600}
+.hc b{display:block;color:var(--mut);font-weight:normal}
+.tag{display:inline-block;padding:1px 9px;border-radius:99px;font-size:11px;font-weight:600;color:#fff;vertical-align:middle}
+.p{background:var(--ok)}.n{background:var(--ko)}.z{background:var(--ne)}
+.key{display:flex;gap:10px;align-items:flex-start;margin:8px 0;padding:9px;border:1px solid var(--line);border-left:4px solid var(--acc2);border-radius:10px;background:linear-gradient(90deg,var(--sand),var(--card))}
+.key svg{flex:none}.key div{font-size:14px}.key small{color:var(--mut)}
+.verdict{font-size:15px;padding:11px 12px;border-left:5px solid var(--gold);background:linear-gradient(90deg,var(--sand),var(--card));border-radius:8px;font-weight:600}
+pre{white-space:pre-wrap;font:inherit;font-size:14px;background:var(--sand);border:1px solid var(--line);padding:11px;border-radius:10px;margin:8px 0}
+details{border-bottom:1px solid var(--line);padding:7px 0}
+summary{cursor:pointer;font-size:14px;color:var(--acc);font-weight:600}
+.chip{display:inline-block;padding:3px 10px;margin:3px 3px 0 0;border-radius:99px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-size:12px;font-weight:600}
+.hg{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:12px;margin-top:6px}
+.hg .m{background:var(--sand);border-radius:5px;font-weight:700;color:var(--acc);padding:1px 4px}
+label{display:block;margin:6px 0;font-size:14px}
+#bk{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));display:none;box-shadow:0 3px 10px rgba(0,0,0,.35);border-radius:99px;z-index:9}
+.hb{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.7);box-shadow:none}
+.hb.doc{background:linear-gradient(135deg,#f5b301,#e8c06a);color:#1a1410;border:0;font-weight:800;padding:10px 16px}
+ol.gd{padding-left:20px;margin:6px 0}ol.gd li{margin:4px 0}
+.note{font-size:12px;color:var(--mut);margin-top:8px}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:var(--sh)}
+.tb{background:transparent;color:var(--acc);border:1.5px solid var(--acc);box-shadow:none;font-size:13px;padding:7px 12px;display:inline-flex;align-items:center;gap:6px}
+.tb.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border-color:transparent}
+#lib{display:none}
+#lib.on{display:block}
+.libgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:900px){.libgrid{grid-template-columns:repeat(4,1fr)}}
+.libcard{border:1px solid var(--line);border-radius:12px;padding:10px;background:linear-gradient(145deg,var(--sand),var(--card));display:flex;gap:10px;align-items:flex-start}
+.libcard svg{flex:none}
+.libcard .lt{font-size:13px}
+.libcard b{display:block;color:var(--acc);font-size:14px;margin-bottom:2px}
+.libcard small{color:var(--mut);font-size:11px;display:block;margin-top:3px}
+.libcard .fmeta{font-size:10px;color:var(--mut);margin-top:4px;border-top:1px dashed var(--line);padding-top:4px}
+body.quick #det,body.quick #tal,body.quick #sac,body.quick #qa,body.quick #frise,body.quick #num,body.quick #tarot,body.quick #versets{display:none}
+#fileIn{display:none}
+
+/* Frise */
+.timeline{position:relative;margin:10px 0;padding:16px 0}
+.timeline .axis{position:absolute;left:0;right:0;top:50%;height:3px;background:linear-gradient(90deg,var(--mut),var(--acc),var(--gold));border-radius:2px;transform:translateY(-50%)}
+.timeline .now-marker{position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--gold);transform:translateX(-50%);z-index:2}
+.timeline .now-label{position:absolute;left:50%;top:-6px;transform:translate(-50%,-100%);background:var(--gold);color:#1a1410;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;z-index:3}
+.tl-grid{position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:4px;z-index:1}
+.tl-slot{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px;border-radius:8px;cursor:pointer;transition:background .15s}
+.tl-slot:hover{background:var(--sand)}
+.tl-slot .num{font-size:10px;color:var(--mut);font-weight:700}
+.tl-slot .fig{border:2px solid transparent;border-radius:6px;padding:2px}
+.tl-slot.past .fig{border-color:var(--mut);opacity:.7}
+.tl-slot.future .fig{border-color:var(--gold);opacity:.85}
+.tl-slot.present .fig{border-color:var(--acc);box-shadow:0 0 0 2px rgba(59,130,246,.3)}
+.tl-slot .lbl{font-size:9px;color:var(--mut);text-align:center;font-weight:600}
+.tl-sections{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px;font-size:11px}
+.tl-sections > div{text-align:center;padding:8px;border-radius:8px;background:linear-gradient(145deg,var(--sand),var(--card));border:1px solid var(--line)}
+.tl-sections b{display:block;color:var(--acc);font-size:12px;margin-bottom:2px}
+.tl-sections span{color:var(--mut)}
+
+/* Praticien */
+#praticienPanel{display:none}
+#praticienPanel.on{display:block}
+.consultant-row{display:flex;gap:8px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:10px;margin:6px 0;background:linear-gradient(90deg,var(--sand),var(--card))}
+.consultant-row.active{border-left:4px solid var(--ok);background:linear-gradient(90deg,rgba(74,222,128,.12),var(--card))}
+.consultant-row .info{flex:1;font-size:13px}
+.consultant-row b{color:var(--acc);display:block}
+.consultant-row small{color:var(--mut)}
+.consultant-row button{padding:5px 10px;font-size:12px}
+.badge-consultant{display:inline-block;background:var(--sand);color:var(--acc);padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;margin-left:6px}
+.install-prompt{display:none;background:linear-gradient(135deg,#f5b301,#e8c06a);color:#1a1410;padding:10px 14px;border-radius:10px;font-weight:700;font-size:13px;align-items:center;gap:8px}
+.install-prompt.on{display:flex}
+
+/* Cauris */
+#caurisPanel{display:none}
+#caurisPanel.on{display:block}
+.cauris-stage{position:relative;width:100%;aspect-ratio:16/10;max-height:420px;background:radial-gradient(ellipse at center,#1a2d52 0%,#0a1628 70%);border:2px solid var(--line);border-radius:16px;overflow:hidden;margin:10px 0;box-shadow:inset 0 0 40px rgba(0,0,0,.6)}
+:root[data-theme="light"] .cauris-stage{background:radial-gradient(ellipse at center,#dce9fb 0%,#eaf2ff 70%)}
+.cauris{position:absolute;width:34px;height:22px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:linear-gradient(145deg,#f5e6d0,#d4b483 60%,#8b6f3f);box-shadow:0 3px 6px rgba(0,0,0,.5),inset 0 -3px 6px rgba(139,111,63,.6),inset 0 2px 4px rgba(255,255,255,.5);transition:transform .6s cubic-bezier(.3,1.4,.6,1);will-change:transform;pointer-events:none;z-index:2}
+.cauris::after{content:"";position:absolute;left:50%;top:50%;width:2px;height:8px;background:linear-gradient(to bottom,#8b6f3f,#5a4520);border-radius:2px;transform:translate(-50%,-50%);opacity:.8}
+.cauris.face-ouv{background:linear-gradient(145deg,#fff8e8,#f5e6d0 60%,#d4b483)}
+.cauris.face-ferm{background:linear-gradient(145deg,#b88a54,#8b6f3f 60%,#5a4520)}
+.cauris.landed{animation:settle .4s ease-out}
+@keyframes settle{0%{transform:scale(1.1)}50%{transform:scale(.95)}100%{transform:scale(1)}}
+.cauris.rolling{animation:roll .5s linear infinite}
+@keyframes roll{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.cauris-count{position:absolute;top:12px;right:14px;background:rgba(0,0,0,.5);color:var(--gold);font-size:13px;font-weight:700;padding:4px 10px;border-radius:99px;z-index:5;border:1px solid rgba(245,179,1,.3)}
+.cauris-msg{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);color:#fff;font-size:13px;font-weight:600;padding:6px 14px;border-radius:99px;z-index:5;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis}
+.cauris-info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;font-size:12px}
+@media(min-width:700px){.cauris-info{grid-template-columns:1fr 1fr 1fr 1fr}}
+.cauris-info > div{padding:8px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(145deg,var(--sand),var(--card));text-align:center}
+.cauris-info b{display:block;color:var(--acc);font-size:14px;margin-bottom:2px}
+.cauris-info small{color:var(--mut);font-size:10px}
+.cauris-history{max-height:180px;overflow-y:auto;margin-top:8px;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--sand);font-family:'Consolas',monospace;font-size:12px}
+.cauris-history .cauris-line{padding:3px 6px;border-radius:4px;display:flex;justify-content:space-between;align-items:center}
+.cauris-history .cauris-line:nth-child(even){background:rgba(255,255,255,.03)}
+.cauris-history .pair{color:#4ade80;font-weight:700}
+.cauris-history .impair{color:#ff8a80;font-weight:700}
+.cauris-parity{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:center}
+.cauris-parity span{display:inline-block;padding:3px 10px;border-radius:99px;background:var(--sand);color:var(--acc);font-size:12px;font-weight:700;border:1px solid var(--line)}
+.cauris-parity span.odd{background:linear-gradient(135deg,#ef4444,#c62828);color:#fff}
+.cauris-parity span.even{background:linear-gradient(135deg,#15803d,#4ade80);color:#fff}
+@media (max-width:520px){.cauris{width:26px;height:17px}.cauris-msg{font-size:11px}}
+
+/* ========= NUMEROLOGIE ========= */
+#num{display:none}
+#num.on{display:block}
+.num-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:700px){.num-grid{grid-template-columns:repeat(4,1fr)}}
+.num-box{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;background:linear-gradient(145deg,var(--sand),var(--card))}
+.num-box .val{font-size:32px;font-weight:800;color:var(--gold);line-height:1;margin:4px 0}
+.num-box .lbl{font-size:11px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.num-box .sub{font-size:10px;color:var(--mut);margin-top:4px}
+.num-synth{margin-top:12px;padding:12px;border-left:4px solid var(--gold);background:linear-gradient(90deg,var(--sand),var(--card));border-radius:10px;font-size:14px}
+.num-planet{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;margin:2px 4px 2px 0;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff}
+
+/* ========= TAROT ========= */
+#tarot{display:none}
+#tarot.on{display:block}
+.tarot-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:700px){.tarot-grid{grid-template-columns:repeat(3,1fr)}}
+.tarot-card{border:1px solid var(--line);border-radius:14px;padding:12px;background:linear-gradient(145deg,var(--sand),var(--card));text-align:center;position:relative;overflow:hidden}
+.tarot-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(245,179,1,.06),transparent);pointer-events:none}
+.tarot-card .arc-num{font-size:11px;color:var(--mut);font-weight:700}
+.tarot-card .arc-emoji{font-size:44px;margin:6px 0;display:block;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
+.tarot-card .arc-nom{font-size:15px;font-weight:800;color:var(--gold);margin-bottom:4px}
+.tarot-card .arc-tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:var(--sand);color:var(--acc);margin-bottom:6px}
+.tarot-card .arc-desc{font-size:12px;color:var(--ink);line-height:1.4}
+.tarot-card .arc-ref{font-size:10px;color:var(--mut);margin-top:6px;border-top:1px dashed var(--line);padding-top:5px}
+.tarot-spread{margin-top:12px}
+.tarot-spread .spread-title{font-size:13px;color:var(--acc);font-weight:700;margin:10px 0 6px}
+@keyframes flipIn{0%{transform:rotateY(90deg) scale(.7);opacity:0}100%{transform:rotateY(0) scale(1);opacity:1}}
+.tarot-card.flip{animation:flipIn .6s ease-out}
+
+/* ========= VERSETS ========= */
+#versets{display:none}
+#versets.on{display:block}
+.verset-box{border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;background:linear-gradient(145deg,var(--sand),var(--card))}
+.verset-box .v-ar{font-size:22px;text-align:right;color:var(--gold);direction:rtl;font-family:'Traditional Arabic','Amiri',serif;line-height:1.7;margin-bottom:8px}
+.verset-box .v-translit{font-style:italic;color:var(--acc2);font-size:12px;margin-bottom:6px}
+.verset-box .v-fr{font-size:14px;line-height:1.5;margin-bottom:6px}
+.verset-box .v-ref{font-size:11px;color:var(--mut);font-weight:700;text-align:right}
+.verset-box .v-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.verset-box .v-actions button{padding:5px 10px;font-size:12px}
+.verset-counter{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;padding:8px;background:rgba(0,0,0,.15);border-radius:8px}
+.verset-counter b{color:var(--acc);min-width:60px}
+.verset-counter button{padding:5px 12px;font-size:14px;min-width:36px}
+.verset-counter .count{font-size:20px;font-weight:800;color:var(--gold);min-width:50px;text-align:center}
+.verset-counter.done{background:linear-gradient(135deg,rgba(74,222,128,.15),transparent);border:1px solid var(--ok)}
+.verset-lib{display:grid;grid-template-columns:1fr;gap:6px;max-height:400px;overflow-y:auto;margin-top:8px}
+@media(min-width:700px){.verset-lib{grid-template-columns:1fr 1fr}}
+
+/* Tarot lib */
+.tarot-lib{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+@media(min-width:700px){.tarot-lib{grid-template-columns:repeat(4,1fr)}}
+.tarot-lib .tl-mini{border:1px solid var(--line);border-radius:8px;padding:6px;text-align:center;background:var(--sand);font-size:11px}
+.tarot-lib .tl-mini .e{font-size:22px;display:block}
+.tarot-lib .tl-mini b{display:block;color:var(--acc);font-size:12px;margin:2px 0}
+</style></head><body>
+<div class="wrap" id="page">
+  <div class="hero">
+    <div class="hero-txt">
+      <h1>Géomancie · ʿilm al-raml</h1>
+      <p class="sub">Touchez chaque case pour y poser des points. Pair = 2 points, impair = 1 point.</p>
+    </div>
+    <div class="row" style="margin-top:0">
+      <button class="hb" id="go">Commencer</button>
+      <button class="hb doc" id="docx">📄 Exporter en Word</button>
+    </div>
+  </div>
+
+  <div class="toolbar col-12">
+    <button class="tb" id="tbTheme">🌓 Thème</button>
+    <button class="tb" id="tbQuick">🎯 Mode rapide</button>
+    <button class="tb" id="tbCauris">🐚 Cauris</button>
+    <button class="tb" id="tbNum">🔢 Numérologie</button>
+    <button class="tb" id="tbTarot">🎴 Tarot</button>
+    <button class="tb" id="tbVersets">📖 Versets</button>
+    <button class="tb" id="tbLib">📚 16 figures</button>
+    <button class="tb" id="tbPraticien">👥 Praticien</button>
+    <button class="tb" id="tbFrise">⏳ Frise</button>
+    <button class="tb" id="tbSave">💾 Sauvegarder</button>
+    <button class="tb" id="tbLoad">📂 Restaurer</button>
+    <button class="tb" id="tbShare">📤 Partager</button>
+    <button class="tb" id="tbInstall">📲 Installer</button>
+    <input type="file" id="fileIn" accept=".json,application/json">
+  </div>
+
+  <div class="install-prompt col-12" id="installPrompt">
+    <span>📲</span>
+    <span style="flex:1">Installez l'application sur votre écran d'accueil pour y accéder hors-ligne.</span>
+    <button id="installBtn" style="background:#1a1410;color:#f5b301;padding:6px 12px;font-size:12px">Installer</button>
+    <button id="installClose" style="background:transparent;color:#1a1410;padding:4px 8px;font-size:12px">✕</button>
+  </div>
+
+  <!-- NUMEROLOGIE -->
+  <div class="card col-12" id="num">
+    <h2>🔢 Numérologie</h2>
+    <p class="note">Saisissez la date de naissance du consultant (optionnelle) pour enrichir la lecture.</p>
+    <div class="row">
+      <input type="date" id="numDdn" style="flex:1;min-width:180px">
+      <input type="text" id="numNom" placeholder="Nom complet (optionnel)" style="flex:2;min-width:200px">
+      <button id="numCalc">Calculer</button>
+    </div>
+    <div id="numResult"></div>
+  </div>
+
+  <!-- TAROT -->
+  <div class="card col-12" id="tarot">
+    <h2>🎴 Tarot — correspondances &amp; tirage</h2>
+    <p class="note">Chaque figure géomantique est reliée à un arcane majeur du Tarot. Un tirage complémentaire de 3 cartes peut enrichir la lecture.</p>
+    <div id="tarotContent"><p class="note">Complétez d'abord le thème géomantique.</p></div>
+    <details style="margin-top:10px"><summary>📚 Bibliothèque des 22 arcanes majeurs</summary><div class="tarot-lib" id="tarotLib"></div></details>
+  </div>
+
+  <!-- VERSETS -->
+  <div class="card col-12" id="versets">
+    <h2>📖 Versets coraniques associés</h2>
+    <p class="note">Correspondances illustratives entre les figures et les versets — à valider avec un praticien ou un imam de votre tradition. Option « tradition ouverte » : vous pouvez utiliser vos propres formules.</p>
+    <div id="versetsContent"><p class="note">Complétez d'abord le thème géomantique.</p></div>
+    <details style="margin-top:10px"><summary>📚 Table complète — 16 figures</summary><div class="verset-lib" id="versetLib"></div></details>
+    <details style="margin-top:6px"><summary>🏠 Table complète — 12 maisons</summary><div class="verset-lib" id="versetLibM"></div></details>
+  </div>
+
+  <!-- CAURIS -->
+  <div class="card col-12" id="caurisPanel">
+    <h2>🐚 Tirage rituel aux cauris</h2>
+    <p class="note">16 jets de cauris remplissent les 16 cellules dans l'ordre traditionnel. Impair = 1 point, pair = 2 points.</p>
+    <div class="cauris-stage" id="caurisStage">
+      <div class="cauris-count" id="caurisCount">Jet 0 / 16</div>
+      <div class="cauris-msg" id="caurisMsg">Prêt pour le premier jet…</div>
+    </div>
+    <div class="cauris-parity" id="caurisParity"></div>
+    <div class="row" style="justify-content:center;margin-top:12px">
+      <button id="caurisThrow" style="font-size:15px;padding:11px 22px">🪙 Lancer les cauris</button>
+      <button class="g" id="caurisAuto">▶️ Auto (16 jets)</button>
+      <button class="g" id="caurisReset">↺ Réinitialiser</button>
+      <select id="caurisNb" title="Nombre de cauris par jet">
+        <option value="8">8 cauris</option>
+        <option value="10">10 cauris</option>
+        <option value="12" selected>12 cauris</option>
+        <option value="16">16 cauris</option>
+      </select>
+    </div>
+    <div class="cauris-info">
+      <div><b id="ciCurrent">—</b><small>Jet en cours</small></div>
+      <div><b id="ciParity">—</b><small>Parité</small></div>
+      <div><b id="ciCell">—</b><small>Cellule</small></div>
+      <div><b id="ciProgress">0/16</b><small>Progression</small></div>
+    </div>
+    <details style="margin-top:10px"><summary>📜 Journal détaillé</summary><div class="cauris-history" id="caurisHistory"><div style="color:var(--mut);font-style:italic">Aucun jet encore effectué.</div></div></details>
+  </div>
+
+  <!-- PRATICIEN -->
+  <div class="card col-12" id="praticienPanel">
+    <h2>👥 Mode praticien</h2>
+    <p class="note">Chaque consultation est associée à un consultant.</p>
+    <div class="row" style="margin-top:6px">
+      <input type="text" id="newConsNom" placeholder="Nom du consultant" style="flex:1;min-width:150px">
+      <input type="text" id="newConsNote" placeholder="Note (optionnel)" style="flex:2;min-width:180px">
+      <button id="addConsBtn">+ Ajouter</button>
+    </div>
+    <div id="consultantList"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="g" id="exportAllCons">📦 Exporter tous les dossiers</button>
+      <button class="g danger" id="clearAllCons">🗑️ Tout effacer</button>
+    </div>
+  </div>
+
+  <!-- LIB -->
+  <div class="card col-12" id="lib">
+    <h2>Bibliothèque des 16 figures</h2>
+    <div class="libgrid" id="libGrid"></div>
+  </div>
+
+  <div class="card col-4" id="guide">
+    <h2>Guide</h2>
+    <details><summary>1. Poser la question</summary><ol class="gd"><li>Écrivez une question précise.</li></ol></details>
+    <details><summary>2. Tracer ou tirer</summary><ol class="gd"><li>Toucher une case : impair = 1 pt, pair = 2 pts.</li><li>🐚 Cauris : tirage rituel animé.</li></ol></details>
+    <details><summary>3. Enrichir la lecture</summary><ol class="gd"><li>🔢 Numérologie : date de naissance + nom.</li><li>🎴 Tarot : carte du Juge, du consultant, tirage complémentaire.</li><li>📖 Versets : récitations associées + compteur.</li></ol></details>
+    <details><summary>4. Installer</summary><ol class="gd"><li>Bouton 📲 Installer → bannière système.</li><li>Si absent : menu navigateur → « Installer l'application ».</li></ol></details>
+  </div>
+
+  <div class="card col-4">
+    <h2>Votre question</h2>
+    <label style="display:flex;align-items:center;gap:8px;margin:0 0 8px">
+      <span>👤</span>
+      <select id="consultantSel" style="flex:1"></select>
+    </label>
+    <textarea id="qt" rows="3" placeholder="Ex. : Aurai-je les moyens d'exécuter ce bon de commande ?"></textarea>
+    <select id="q"></select>
+    <div class="note">Le domaine est proposé automatiquement.</div>
+  </div>
+
+  <div class="card col-4">
+    <h2>Lucarne de tracé — les 4 Mères</h2>
+    <div id="sand"></div>
+    <div class="names" id="names"></div>
+    <div class="row" style="font-size:11px;color:var(--mut);gap:12px">
+      <span style="color:#ef4444">● Feu</span><span style="color:#0ea5e9">● Air</span><span style="color:#1d4ed8">● Eau</span><span style="color:#a16207">● Terre</span>
+    </div>
+    <div class="row">
+      <button id="rnd">Tirage aléatoire</button>
+      <button class="g" id="undo">Annuler</button>
+      <button class="g" id="clr">Effacer</button>
+    </div>
+  </div>
+
+  <div id="out" class="col-12"></div>
+  <div id="hist" class="col-12"></div>
+</div>
+
+<button id="bk" aria-label="Retour en haut">↑ Retour</button>
+
+<script>
+/* ============================================================
+   DONNÉES DE BASE
+============================================================ */
+const R=["Feu","Air","Eau","Terre"],EC=["#ef4444","#0ea5e9","#1d4ed8","#a16207"];
+const T={
+"1111":["Via","Lune","lundi","Voyage, chemin, changement, mobilité.",0],
+"2222":["Populus","Lune","lundi","Foule, foyer, neutre : amplifie ce qui l'entoure.",0],
+"1221":["Conjunctio","Mercure","mercredi","Union, rencontre, accord, retrouvailles.",0],
+"2112":["Carcer","Saturne","samedi","Blocage, retard, fonds immobilisés ; stabilité.",-1],
+"2211":["Fortuna Major","Soleil","dimanche","Grand succès, protection durable.",1],
+"1122":["Fortuna Minor","Soleil","dimanche","Petit succès rapide mais passager.",1],
+"1212":["Acquisitio","Jupiter","jeudi","Gain, obtention, profit.",1],
+"2121":["Amissio","Vénus","vendredi","Perte, dépense, lâcher-prise.",-1],
+"1222":["Laetitia","Jupiter","jeudi","Joie, élan, optimisme.",1],
+"2221":["Tristitia","Saturne","samedi","Tristesse, lenteur, fondations, profondeur.",-1],
+"1121":["Puer","Mars","mardi","Impulsivité, combativité, initiative risquée.",0],
+"1211":["Puella","Vénus","vendredi","Douceur, harmonie, séduction, diplomatie.",1],
+"2212":["Albus","Mercure","mercredi","Paix, sagesse, réflexion, patience.",1],
+"2122":["Rubeus","Mars","mardi","Passion, excès, conflit, précipitation.",-1],
+"2111":["Caput Draconis","Nœud nord","jeudi","Seuil, début, entrée, nouveau départ.",1],
+"1112":["Cauda Draconis","Nœud sud","samedi","Sortie, fin, clôture, départ.",-1]};
+const HM=["Vie, consultant","Biens, argent","Frères, trajets courts","Foyer, père","Enfants, plaisirs","Santé, employés","Mariage, adversaire","Héritage, mort","Voyages, religion","Carrière, honneurs","Amis, espoirs","Épreuves, ennemis cachés"];
+const HD=[
+["Votre présence est forte et bien entourée : vous inspirez confiance. C'est le moment de vous montrer et d'assumer votre place.","Votre énergie est basse ou dispersée : recentrez-vous avant d'agir.","Votre situation personnelle est stable, sans élan particulier."],
+["Les ressources sont présentes : rentrées, appuis, occasions. Sachez saisir.","Risque de perte ou de mauvaise affaire : sécurisez.","Finances en équilibre, sans gain net."],
+["Relations fluides avec l'entourage, échanges utiles.","Tensions avec l'entourage, démarches contrariées.","Contacts ordinaires, peu d'enjeux."],
+["Foyer et patrimoine protégés : base solide.","Foyer instable : consolidez d'abord la base.","Situation domestique inchangée."],
+["Joie, créativité, bonnes nouvelles.","Déception, dispersion, plaisirs coûteux.","Peu d'élan créatif."],
+["Bonne vitalité, équipe fiable.","Fatigue, surcharge, collaborateurs peu fiables.","Vigilance ordinaire."],
+["Accord, alliance, partenaire favorable.","Partenaire difficile, litige possible.","Relation à clarifier."],
+["Gain indirect, héritage, transformation favorable.","Dettes, engagements lourds.","Transformation lente."],
+["Voyage ou études propices.","Voyage risqué ou remis.","Projets lointains flous."],
+["Reconnaissance, promotion, autorité.","Blocage de carrière ou perte de prestige.","Position stable."],
+["Soutien d'amis, espoirs réalisables.","Alliés peu fiables, espoirs retardés.","Aide possible mais non acquise."],
+["Épreuves surmontables, ennemis neutralisés.","Obstacles cachés, jalousies.","Peu de menaces visibles."]];
+const Q={"Ma personne":1,"Argent, moyens financiers":2,"Foyer, immobilier":4,"Santé, travail quotidien":6,"Contrat, mariage, adversaire":7,"Voyage, études":9,"Carrière, projet pro":10,"Amis, espoirs":11};
+let dots=[0,1,2,3].map(()=>[0,1,2,3].map(()=>[])),last=null,lastResult=null;
+const $=s=>document.querySelector(s);
+const info=v=>T[v.join("")];
+const esc=t=>String(t).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ============================================================
+   MODULE NUMEROLOGIE
+============================================================ */
+function reduceNum(n,keepMaster=true){
+  n=Math.abs(parseInt(n,10));
+  if(isNaN(n))return 0;
+  while(n>9){
+    if(keepMaster&&(n===11||n===22||n===33))return n;
+    n=String(n).split("").reduce((s,d)=>s+parseInt(d,10),0);
+  }
+  return n;
+}
+const NUM_PLANETS={
+  1:{nom:"Soleil",sens:"Leadership, initiative, affirmation"},
+  2:{nom:"Lune",sens:"Réceptivité, intuition, dualité"},
+  3:{nom:"Jupiter",sens:"Expansion, chance, expression"},
+  4:{nom:"Saturne",sens:"Structure, discipline, épreuve"},
+  5:{nom:"Mercure",sens:"Communication, mouvement, adaptabilité"},
+  6:{nom:"Vénus",sens:"Harmonie, amour, responsabilité"},
+  7:{nom:"Neptune",sens:"Spiritualité, mystère, intériorité"},
+  8:{nom:"Saturne",sens:"Justice, karma, matérialité"},
+  9:{nom:"Mars",sens:"Achèvement, courage, sacrifice"},
+  11:{nom:"Uranus",sens:"Maître-nombre : intuition élevée, illumination"},
+  22:{nom:"Neptune",sens:"Maître-nombre : construction, réalisation"},
+  33:{nom:"Vénus",sens:"Maître-nombre : amour universel, enseignement"}
+};
+const LETTER_VALUES={a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9,j:1,k:2,l:3,m:4,n:5,o:6,p:7,q:8,r:9,s:1,t:2,u:3,v:4,w:5,x:6,y:7,z:8};
+function reduceString(s){
+  let sum=0;
+  String(s).toLowerCase().replace(/[^a-z]/g,"").split("").forEach(ch=>sum+=LETTER_VALUES[ch]||0);
+  return reduceNum(sum);
+}
+function sumPoints(v){return v.reduce((a,b)=>a+b,0)}
+function renderNum(c){
+  const J=info(c.J),C=info(c.C);
+  const numJuge=reduceNum(sumPoints(c.J));
+  const numCons=reduceNum(sumPoints(c.TD));
+  const numConc=reduceNum(sumPoints(c.C));
+  const now=new Date();
+  const numJour=reduceNum(now.getDate()+now.getMonth()+1+now.getFullYear());
+  const qt=$("#qt").value.trim();
+  const numQuestion=qt?reduceString(qt):0;
+  const ddn=$("#numDdn").value;
+  const nom=$("#numNom").value.trim();
+  const numDdn=ddn?reduceNum(ddn.replace(/-/g,"")):0;
+  const numNom=nom?reduceString(nom):0;
+  const numVie=numDdn?reduceNum(ddn.replace(/-/g,"")):0;
+
+  const boxes=[];
+  boxes.push({lbl:"Juge",val:numJuge,sub:`${sumPoints(c.J)} pts → réduit`});
+  boxes.push({lbl:"Consultant (Témoin D)",val:numCons,sub:`${sumPoints(c.TD)} pts → réduit`});
+  boxes.push({lbl:"Conciliateur",val:numConc,sub:`${sumPoints(c.C)} pts → réduit`});
+  boxes.push({lbl:"Jour du tirage",val:numJour,sub:now.toLocaleDateString("fr-FR")});
+  if(numQuestion)boxes.push({lbl:"Question",val:numQuestion,sub:`${qt.length} lettres`});
+  if(numDdn)boxes.push({lbl:"Chemin de vie",val:numVie,sub:ddn});
+  if(numNom)boxes.push({lbl:"Expression (nom)",val:numNom,sub:nom});
+
+  const plan=(n)=>NUM_PLANETS[n]?`<span class="num-planet">${NUM_PLANETS[n].nom}</span> <small style="color:var(--mut)">${NUM_PLANETS[n].sens}</small>`:"";
+  // synthèse
+  let synth="";
+  if(numJuge===numCons){
+    synth=`Le nombre du Juge (${numJuge}) rejoint celui de votre Témoin droit : les deux pôles de la consultation sont alignés. Cela renforce la cohérence de la réponse.`;
+  }else if(numJuge===numConc){
+    synth=`Le Juge (${numJuge}) et le Conciliateur (${numConc}) partagent la même vibration : la conclusion est nette, sans ambiguïté.`;
+  }else{
+    const diff=Math.abs(numJuge-numConc);
+    synth=`Écart entre Juge (${numJuge}) et Conciliateur (${numConc}) : ${diff}. Cet écart exprime la nuance du thème — plus il est grand, plus la réponse demande d'ajustements.`;
+  }
+  if(numDdn){
+    const aligned=(numJuge===numVie)||(numConc===numVie);
+    synth+=`<br>${aligned?"✅ Votre chemin de vie est en résonance directe avec le thème.":"Le thème n'est pas en résonance vibratoire directe avec votre chemin de vie : cela invite à la vigilance."}`;
+  }
+
+  $("#numResult").innerHTML=`<div class="num-grid" style="margin-top:10px">
+    ${boxes.map(b=>`<div class="num-box">
+      <div class="lbl">${b.lbl}</div>
+      <div class="val">${b.val}</div>
+      <div class="sub">${b.sub}</div>
+      <div style="margin-top:6px">${plan(b.val)}</div>
+    </div>`).join("")}
+  </div>
+  <div class="num-synth"><b>Synthèse :</b> ${synth}</div>`;
+}
+$("#numCalc").onclick=()=>{if(lastResult)renderNum(lastResult);};
+
+/* ============================================================
+   MODULE TAROT
+============================================================ */
+const TAROT_MAP={
+  "Via":{n:0,emoji:"🌫️",nom:"Le Mat",tag:"Commencement",desc:"Départ, errance, innocence, potentiel infini."},
+  "Populus":{n:3,emoji:"👑",nom:"L'Impératrice",tag:"Abondance",desc:"Fécondité, maternité, créativité, croissance."},
+  "Conjunctio":{n:6,emoji:"💞",nom:"Les Amoureux",tag:"Union",desc:"Choix, rencontre, alliance, harmonie du cœur."},
+  "Carcer":{n:15,emoji:"⛓️",nom:"Le Diable",tag:"Entrave",desc:"Blocage, attachement, matière, libération à venir."},
+  "Fortuna Major":{n:19,emoji:"☀️",nom:"Le Soleil",tag:"Grand succès",desc:"Triomphe, clarté, protection, énergie rayonnante."},
+  "Fortuna Minor":{n:10,emoji:"🎡",nom:"La Roue",tag:"Cycle",desc:"Chance passagère, tournant, apprentissage du temps."},
+  "Acquisitio":{n:4,emoji:"🏛️",nom:"L'Empereur",tag:"Autorité",desc:"Gain, conquête, structure, maîtrise matérielle."},
+  "Amissio":{n:2,emoji:"📜",nom:"La Papesse",tag:"Intériorité",desc:"Perte, silence, écoute profonde, savoir caché."},
+  "Laetitia":{n:17,emoji:"⭐",nom:"L'Étoile",tag:"Espoir",desc:"Inspiration, sérénité, joie spirituelle, guidance."},
+  "Tristitia":{n:18,emoji:"🌙",nom:"La Lune",tag:"Mystère",desc:"Tristesse, illusion, rêve, monde intérieur."},
+  "Puer":{n:7,emoji:"🏇",nom:"Le Chariot",tag:"Élan",desc:"Impulsivité, victoire par l'action, mouvement rapide."},
+  "Puella":{n:14,emoji:"🏺",nom:"La Tempérance",tag:"Harmonie",desc:"Douceur, mesure, patience, guérison."},
+  "Albus":{n:12,emoji:"🙃",nom:"Le Pendu",tag:"Pause",desc:"Renoncement, inversion du regard, sagesse par l'attente."},
+  "Rubeus":{n:16,emoji:"🗼",nom:"La Maison-Dieu",tag:"Rupture",desc:"Chaos, effondrement, révélation brutale, reconstruction."},
+  "Caput Draconis":{n:20,emoji:"📯",nom:"Le Jugement",tag:"Renaissance",desc:"Appel, éveil, seuil franchi, nouvelle naissance."},
+  "Cauda Draconis":{n:13,emoji:"💀",nom:"La Mort",tag:"Fin",desc:"Clôture, transformation radicale, passage nécessaire."}
+};
+const ARCANES=[
+  {n:0,e:"🌫️",nom:"Le Mat"},{n:1,e:"🪄",nom:"Le Bateleur"},{n:2,e:"📜",nom:"La Papesse"},
+  {n:3,e:"👑",nom:"L'Impératrice"},{n:4,e:"🏛️",nom:"L'Empereur"},{n:5,e:"⛪",nom:"Le Pape"},
+  {n:6,e:"💞",nom:"Les Amoureux"},{n:7,e:"🏇",nom:"Le Chariot"},{n:8,e:"⚖️",nom:"La Justice"},
+  {n:9,e:"🔦",nom:"L'Ermite"},{n:10,e:"🎡",nom:"La Roue"},{n:11,e:"💪",nom:"La Force"},
+  {n:12,e:"🙃",nom:"Le Pendu"},{n:13,e:"💀",nom:"La Mort"},{n:14,e:"🏺",nom:"La Tempérance"},
+  {n:15,e:"⛓️",nom:"Le Diable"},{n:16,e:"🗼",nom:"La Maison-Dieu"},{n:17,e:"⭐",nom:"L'Étoile"},
+  {n:18,e:"🌙",nom:"La Lune"},{n:19,e:"☀️",nom:"Le Soleil"},{n:20,e:"📯",nom:"Le Jugement"},
+  {n:21,e:"🌍",nom:"Le Monde"}
+];
+function tarotCard(v,label){
+  const fig=info(v);
+  const arc=TAROT_MAP[fig[0]]||{n:"?",emoji:"❔",nom:"Inconnu",tag:"—",desc:"—"};
+  return `<div class="tarot-card flip">
+    <div class="arc-num">Arcane n° ${arc.n}</div>
+    <span class="arc-emoji">${arc.emoji}</span>
+    <div class="arc-nom">${arc.nom}</div>
+    <span class="arc-tag">${arc.tag}</span>
+    <div class="arc-desc">${arc.desc}</div>
+    <div class="arc-ref"><b>${label}</b> — ${fig[0]} (${fig[1]})</div>
+  </div>`;
+}
+function renderTarot(c){
+  const h=Q[$("#q").value],v=c.H[h-1];
+  const consulTxt=`Consultant (Témoin D) — ${info(c.TD)[0]}`;
+  const jugeTxt=`Juge — ${info(c.J)[0]}`;
+  const concTxt=`Conciliateur — ${info(c.C)[0]}`;
+  // Tirage complémentaire aléatoire
+  const spread=[0,0,0].map(()=>ARCANES[Math.floor(Math.random()*ARCANES.length)]);
+  const spreadNames=["Passé","Présent","Futur"];
+  $("#tarotContent").innerHTML=`
+    <div class="tarot-grid">
+      ${tarotCard(c.TD,consulTxt)}
+      ${tarotCard(c.J,jugeTxt)}
+      ${tarotCard(c.C,concTxt)}
+    </div>
+    <div class="tarot-spread">
+      <div class="spread-title">🎴 Tirage complémentaire 3 cartes</div>
+      <div class="tarot-grid" id="tarotSpread">
+        ${spread.map((a,i)=>`<div class="tarot-card flip">
+          <div class="arc-num">${spreadNames[i]}</div>
+          <span class="arc-emoji">${a.e}</span>
+          <div class="arc-nom">${a.nom}</div>
+          <div class="arc-ref">Arcane n° ${a.n}</div>
+        </div>`).join("")}
+      </div>
+      <div class="row" style="margin-top:8px"><button class="g" id="tarotRedraw">↺ Retirer 3 cartes</button></div>
+    </div>
+  `;
+  $("#tarotRedraw").onclick=()=>renderTarot(c);
+}
+function renderTarotLib(){
+  $("#tarotLib").innerHTML=ARCANES.map(a=>`<div class="tl-mini"><span class="e">${a.e}</span><b>${a.nom}</b><small>Arcane ${a.n}</small></div>`).join("");
+}
+renderTarotLib();
+
+/* ============================================================
+   MODULE VERSETS CORANIQUES
+============================================================ */
+const VERSETS_FIG={
+  "Via":{ar:"فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",translit:"Fa-inna maʿa l-ʿusri yusrā",fr:"« À côté de la difficulté est, certes, une facilité. »",ref:"Sourate 94 (Ash-Sharh), v.5-6",rec:7},
+  "Populus":{ar:"يَا أَيُّهَا النَّاسُ إِنَّا خَلَقْنَاكُم مِّن ذَكَرٍ وَأُنثَىٰ وَجَعَلْنَاكُمْ شُعُوبًا وَقَبَائِلَ لِتَعَارَفُوا",translit:"Yā ayyuha n-nāsu innā khalaqnākum min dhakarin wa unthā wa jaʿalnākum shuʿūban wa qabāʾila li-taʿārafū",fr:"« Ô hommes ! Nous vous avons créés d'un mâle et d'une femelle, et Nous avons fait de vous des nations et des tribus, pour que vous vous entre-connaissiez. »",ref:"Sourate 49 (Al-Hujurat), v.13",rec:7},
+  "Conjunctio":{ar:"وَاعْتَصِمُوا بِحَبْلِ اللَّهِ جَمِيعًا وَلَا تَفَرَّقُوا",translit:"Waʿtaṣimū bi-ḥabli llāhi jamīʿan wa lā tafarraqū",fr:"« Attachez-vous tous au câble d'Allah et ne vous divisez pas. »",ref:"Sourate 3 (Al-Imran), v.103",rec:11},
+  "Carcer":{ar:"وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا",translit:"Wa-man yattaqi llāha yajʿal lahu makhrajā",fr:"« Et quiconque craint Allah, Il lui donnera une issue favorable. »",ref:"Sourate 65 (At-Talaq), v.2",rec:11},
+  "Fortuna Major":{ar:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ",translit:"Allāhu lā ilāha illā huwa l-ḥayyu l-qayyūm",fr:"« Allah ! Point de divinité à part Lui, le Vivant, Celui qui subsiste par Lui-même. » (Ayat al-Kursi — protection)",ref:"Sourate 2 (Al-Baqara), v.255",rec:7},
+  "Fortuna Minor":{ar:"قُلِ اللَّهُمَّ مَالِكَ الْمُلْكِ تُؤْتِي الْمُلْكَ مَن تَشَاءُ",translit:"Quli llāhumma mālika l-mulki tuʾtī l-mulka man tashāʾ",fr:"« Dis : Ô Allah, Maître de la royauté, Tu donnes la royauté à qui Tu veux. »",ref:"Sourate 3 (Al-Imran), v.26",rec:11},
+  "Acquisitio":{ar:"مَّثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ",translit:"Mathalu lladhīna yunfiqūna amwālahum fī sabīli llāhi ka-mathali ḥabbatin anbatat sabʿa sanābil",fr:"« Ceux qui dépensent leurs biens dans le sentier d'Allah ressemblent à un grain d'où naissent sept épis. »",ref:"Sourate 2 (Al-Baqara), v.261",rec:7},
+  "Amissio":{ar:"لِكَيْلَا تَأْسَوْا عَلَىٰ مَا فَاتَكُمْ وَلَا تَفْرَحُوا بِمَا آتَاكُمْ",translit:"Li-kaylā taʾsaw ʿalā mā fātakum wa lā tafraḥū bi-mā ātākum",fr:"« Afin que vous ne vous affligiez pas pour ce que vous avez perdu, ni ne vous réjouissiez outre mesure de ce qu'Il vous a donné. »",ref:"Sourate 57 (Al-Hadid), v.23",rec:11},
+  "Laetitia":{ar:"قُلْ بِفَضْلِ اللَّهِ وَبِرَحْمَتِهِ فَبِذَٰلِكَ فَلْيَفْرَحُوا",translit:"Qul bi-faḍli llāhi wa bi-raḥmatihi fa-bi-dhālika fal-yafraḥū",fr:"« Dis : c'est par la grâce d'Allah et par Sa miséricorde — et c'est en cela qu'ils doivent se réjouir. »",ref:"Sourate 10 (Yunus), v.58",rec:7},
+  "Tristitia":{ar:"يَا أَيُّهَا الَّذِينَ آمَنُوا اسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ إِنَّ اللَّهَ مَعَ الصَّابِرِينَ",translit:"Yā ayyuha lladhīna āmanū staʿīnū bi-ṣ-ṣabri wa ṣ-ṣalāti inna llāha maʿa ṣ-ṣābirīn",fr:"« Ô vous qui croyez ! Cherchez le secours dans la patience et la prière. Allah est avec les endurants. »",ref:"Sourate 2 (Al-Baqara), v.153",rec:11},
+  "Puer":{ar:"وَأَعِدُّوا لَهُم مَّا اسْتَطَعْتُم مِّن قُوَّةٍ",translit:"Wa-aʿiddū lahum mā staṭaʿtum min quwwa",fr:"« Et préparez contre eux tout ce que vous pouvez comme force. »",ref:"Sourate 8 (Al-Anfal), v.60",rec:7},
+  "Puella":{ar:"وَعِبَادُ الرَّحْمَٰنِ الَّذِينَ يَمْشُونَ عَلَى الْأَرْضِ هَوْنًا",translit:"Wa-ʿibādu r-Raḥmāni lladhīna yamshūna ʿalā l-arḍi hawnā",fr:"« Les serviteurs du Tout Miséricordieux sont ceux qui marchent humblement sur la terre. »",ref:"Sourate 25 (Al-Furqan), v.63",rec:11},
+  "Albus":{ar:"لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا",translit:"Lā yukallifu llāhu nafsan illā wusʿahā",fr:"« Allah n'impose à aucune âme une charge supérieure à sa capacité. »",ref:"Sourate 2 (Al-Baqara), v.286",rec:7},
+  "Rubeus":{ar:"لَهُ مُعَقِّبَاتٌ مِّن بَيْنِ يَدَيْهِ وَمِنْ خَلْفِهِ يَحْفَظُونَهُ مِنْ أَمْرِ اللَّهِ",translit:"Lahu muʿaqqibātun min bayni yadayhi wa min khalfihi yaḥfaẓūnahu min amri llāh",fr:"« Il a devant et derrière lui des anges qui se relaient pour le garder par ordre d'Allah. »",ref:"Sourate 13 (Ar-Ra'd), v.11",rec:11},
+  "Caput Draconis":{ar:"قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا عَلَىٰ أَنفُسِهِمْ لَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ",translit:"Qul yā ʿibādiya lladhīna asrafū ʿalā anfusihim lā taqnaṭū min raḥmati llāh",fr:"« Dis : Ô Mes serviteurs qui avez commis des excès à votre propre détriment, ne désespérez pas de la miséricorde d'Allah. »",ref:"Sourate 39 (Az-Zumar), v.53",rec:7},
+  "Cauda Draconis":{ar:"كُلُّ نَفْسٍ ذَائِقَةُ الْمَوْتِ",translit:"Kullu nafsin dhāʾiqatu l-mawt",fr:"« Toute âme goûtera la mort. »",ref:"Sourate 3 (Al-Imran), v.185",rec:11}
+};
+const VERSETS_MAISON=[
+  {ar:"قُلْ إِنَّ صَلَاتِي وَنُسُكِي وَمَحْيَايَ وَمَمَاتِي لِلَّهِ رَبِّ الْعَالَمِينَ",translit:"Qul inna ṣalātī wa nusukī wa maḥyāya wa mamātī li-llāhi rabbi l-ʿālamīn",fr:"« Dis : ma prière, mon sacrifice, ma vie et ma mort appartiennent à Allah, Seigneur de l'univers. »",ref:"Sourate 6 (Al-An'am), v.162"},
+  {ar:"وَمَا أَنفَقْتُم مِّن شَيْءٍ فَهُوَ يُخْلِفُهُ",translit:"Wa mā anfaqtum min shayʾin fa-huwa yukhlifuhu",fr:"« Tout ce que vous dépensez, Il le remplacera. »",ref:"Sourate 34 (Saba), v.39"},
+  {ar:"وَاتَّقُوا اللَّهَ الَّذِي تَسَاءَلُونَ بِهِ وَالْأَرْحَامَ",translit:"Wa-ttaqū llāha lladhī tasāʾalūna bihi wa l-arḥām",fr:"« Craignez Allah au nom duquel vous vous implorez les uns les autres, et respectez les liens du sang. »",ref:"Sourate 4 (An-Nisa), v.1"},
+  {ar:"وَاللَّهُ جَعَلَ لَكُم مِّن بُيُوتِكُمْ سَكَنًا",translit:"Wa-llāhu jaʿala lakum min buyūtikum sakanā",fr:"« Allah vous a donné des demeures pour vous reposer. »",ref:"Sourate 16 (An-Nahl), v.80"},
+  {ar:"رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ",translit:"Rabbanā hab lanā min azwājinā wa dhurriyyātinā qurrata aʿyun",fr:"« Seigneur, accorde-nous, de nos épouses et de nos enfants, la joie des yeux. »",ref:"Sourate 25 (Al-Furqan), v.74"},
+  {ar:"وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ",translit:"Wa idhā mariḍtu fa-huwa yashfīn",fr:"« Et quand je suis malade, c'est Lui qui me guérit. »",ref:"Sourate 26 (Ash-Shu'ara), v.80"},
+  {ar:"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا",translit:"Wa min āyātihi an khalaqa lakum min anfusikum azwājan li-taskunū ilayhā",fr:"« Parmi Ses signes, Il a créé pour vous des épouses, afin que vous trouviez auprès d'elles la quiétude. »",ref:"Sourate 30 (Ar-Rum), v.21"},
+  {ar:"لِّلرِّجَالِ نَصِيبٌ مِّمَّا تَرَكَ الْوَالِدَانِ وَالْأَقْرَبُونَ",translit:"Li-r-rijāli naṣībun mimmā taraka l-wālidāni wa l-aqrabūn",fr:"« Aux hommes revient une part de ce que laissent les père et mère et les proches. »",ref:"Sourate 4 (An-Nisa), v.7"},
+  {ar:"وَإِذَا ضَرَبْتُمْ فِي الْأَرْضِ فَلَيْسَ عَلَيْكُمْ جُنَاحٌ",translit:"Wa idhā ḍarabtum fī l-arḍi fa-laysa ʿalaykum junāḥ",fr:"« Quand vous voyagez sur la terre, il ne vous est pas fait de reproche… »",ref:"Sourate 4 (An-Nisa), v.101"},
+  {ar:"فَإِذَا قُضِيَتِ الصَّلَاةُ فَانتَشِرُوا فِي الْأَرْضِ وَابْتَغُوا مِن فَضْلِ اللَّهِ",translit:"Fa-idhā quḍiyati ṣ-ṣalātu fa-ntashirū fī l-arḍi wa-btaghū min faḍli llāh",fr:"« Quand la prière est achevée, dispersez-vous sur la terre et recherchez la grâce d'Allah. »",ref:"Sourate 62 (Al-Jumu'a), v.10"},
+  {ar:"وَاعْتَصِمُوا بِحَبْلِ اللَّهِ جَمِيعًا",translit:"Waʿtaṣimū bi-ḥabli llāhi jamīʿā",fr:"« Attachez-vous tous au câble d'Allah. »",ref:"Sourate 3 (Al-Imran), v.103"},
+  {ar:"قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ",translit:"Qul aʿūdhu bi-rabbi l-falaq min sharri mā khalaq",fr:"« Dis : je cherche protection auprès du Seigneur de l'aube naissante, contre le mal de ce qu'Il a créé. »",ref:"Sourate 113 (Al-Falaq), v.1-2"}
+];
+const BASMALA={ar:"بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",translit:"Bismi llāhi r-Raḥmāni r-Raḥīm",fr:"« Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux. »",ref:"Ouverture de chaque sourate",rec:1};
+const FATIHA={ar:"الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",translit:"Al-ḥamdu li-llāhi rabbi l-ʿālamīn",fr:"« Louange à Allah, Seigneur de l'univers. »",ref:"Sourate 1 (Al-Fatiha), v.2",rec:7};
+
+// stockage des compteurs de récitation
+const VK="geo_verset_counts";
+function loadVC(){try{return JSON.parse(localStorage.getItem(VK)||"{}")}catch(e){return{}}}
+function saveVC(o){try{localStorage.setItem(VK,JSON.stringify(o))}catch(e){}}
+function getVC(k){const o=loadVC();return o[k]||0}
+function setVC(k,v){const o=loadVC();o[k]=Math.max(0,parseInt(v,10)||0);saveVC(o);}
+
+function versetBox(v,label,key){
+  const cur=getVC(key);
+  const target=v.rec||7;
+  const done=cur>=target;
+  return `<div class="verset-box">
+    <div style="font-size:11px;color:var(--mut);font-weight:700;margin-bottom:4px">${label}</div>
+    <div class="v-ar">${v.ar}</div>
+    <div class="v-translit">${v.translit}</div>
+    <div class="v-fr">${v.fr}</div>
+    <div class="v-ref">${v.ref}</div>
+    <div class="verset-counter${done?" done":""}" data-key="${esc(key)}" data-target="${target}">
+      <b>Récitations :</b>
+      <button class="g vc-minus" data-key="${esc(key)}">−</button>
+      <span class="count" data-key="${esc(key)}">${cur}</span>
+      <button class="vc-plus" data-key="${esc(key)}">+</button>
+      <button class="vc-reset g" data-key="${esc(key)}" style="font-size:11px;padding:4px 8px">↺</button>
+      <span style="color:${done?"var(--ok)":"var(--mut)"};font-size:11px;font-weight:700">${done?"✓ Atteint ("+target+")":"cible : "+target}</span>
+    </div>
+    <div class="v-actions">
+      <button class="g vc-copy" data-text="${esc(v.ar+"\n"+v.translit+"\n"+v.fr+"\n"+v.ref)}">📋 Copier</button>
+      <button class="g vc-speak" data-text="${esc(v.ar)}">🔊 Écouter (AR)</button>
+    </div>
+  </div>`;
+}
+
+function renderVersets(c){
+  const h=Q[$("#q").value],v=c.H[h-1];
+  const jugeFig=info(c.J),concFig=info(c.C),consFig=info(c.TD),qFig=info(v);
+  const jugeV=VERSETS_FIG[jugeFig[0]]||BASMALA;
+  const concV=VERSETS_FIG[concFig[0]]||BASMALA;
+  const consV=VERSETS_FIG[consFig[0]]||BASMALA;
+  const qV=VERSETS_FIG[qFig[0]]||BASMALA;
+  const mV=VERSETS_MAISON[h-1]||BASMALA;
+  $("#versetsContent").innerHTML=`
+    <div class="verdict" style="margin-bottom:10px">📖 Verset du Juge — récitation principale du talisman</div>
+    ${versetBox(jugeV,"Juge — "+jugeFig[0],"fig:"+jugeFig[0])}
+    <div class="verdict" style="margin:10px 0">🎯 Verset du Conciliateur — nuance finale</div>
+    ${versetBox(concV,"Conciliateur — "+concFig[0],"fig:"+concFig[0])}
+    <div class="verdict" style="margin:10px 0">👤 Verset du consultant (Témoin droit)</div>
+    ${versetBox(consV,"Consultant — "+consFig[0],"fig:"+consFig[0])}
+    <div class="verdict" style="margin:10px 0">❓ Verset de la maison de votre question — Maison ${h} (${esc(HM[h-1])})</div>
+    ${versetBox(mV,"Maison "+h+" — "+esc(HM[h-1]),"maison:"+h)}
+    <div class="verdict" style="margin:10px 0">🕋 Ouverture et clôture</div>
+    ${versetBox(BASMALA,"Basmala — ouverture","basmala")}
+    ${versetBox(FATIHA,"Al-Fatiha — clôture","fatiha")}
+  `;
+  bindVersetActions();
+}
+
+function bindVersetActions(){
+  document.querySelectorAll(".vc-plus").forEach(b=>{
+    b.onclick=()=>{const k=b.dataset.key;setVC(k,getVC(k)+1);refreshVersetUI(k);};
+  });
+  document.querySelectorAll(".vc-minus").forEach(b=>{
+    b.onclick=()=>{const k=b.dataset.key;setVC(k,Math.max(0,getVC(k)-1));refreshVersetUI(k);};
+  });
+  document.querySelectorAll(".vc-reset").forEach(b=>{
+    b.onclick=()=>{const k=b.dataset.key;setVC(k,0);refreshVersetUI(k);};
+  });
+  document.querySelectorAll(".vc-copy").forEach(b=>{
+    b.onclick=async()=>{
+      try{await navigator.clipboard.writeText(b.dataset.text);b.textContent="✓ Copié";setTimeout(()=>b.textContent="📋 Copier",1500);}catch(e){}
+    };
+  });
+  document.querySelectorAll(".vc-speak").forEach(b=>{
+    b.onclick=()=>{
+      if(!("speechSynthesis" in window)){alert("Synthèse vocale non supportée.");return;}
+      const u=new SpeechSynthesisUtterance(b.dataset.text);
+      u.lang="ar-SA";u.rate=.85;
+      speechSynthesis.cancel();speechSynthesis.speak(u);
+    };
+  });
+}
+function refreshVersetUI(key){
+  const el=document.querySelector(`.verset-counter[data-key="${CSS.escape(key)}"]`);
+  if(!el)return;
+  const cur=getVC(key);const target=parseInt(el.dataset.target,10)||7;const done=cur>=target;
+  el.querySelector(".count").textContent=cur;
+  el.classList.toggle("done",done);
+  const stat=el.querySelector("span:last-child");
+  if(stat)stat.textContent=done?`✓ Atteint (${target})`:`cible : ${target}`;
+}
+
+function renderVersetLib(){
+  $("#versetLib").innerHTML=Object.entries(VERSETS_FIG).map(([k,v])=>`<div class="verset-box" style="margin:4px 0;padding:8px">
+    <div style="font-size:12px;font-weight:800;color:var(--acc)">${k}</div>
+    <div class="v-ar" style="font-size:16px;margin:4px 0">${v.ar}</div>
+    <div class="v-fr" style="font-size:12px">${v.fr}</div>
+    <div class="v-ref">${v.ref} · réciter ${v.rec}×</div>
+  </div>`).join("");
+  $("#versetLibM").innerHTML=VERSETS_MAISON.map((v,i)=>`<div class="verset-box" style="margin:4px 0;padding:8px">
+    <div style="font-size:12px;font-weight:800;color:var(--acc)">Maison ${i+1} — ${HM[i]}</div>
+    <div class="v-ar" style="font-size:16px;margin:4px 0">${v.ar}</div>
+    <div class="v-fr" style="font-size:12px">${v.fr}</div>
+    <div class="v-ref">${v.ref}</div>
+  </div>`).join("");
+}
+renderVersetLib();
+
+/* ============================================================
+   PWA — CORRIGÉ
+============================================================ */
+(function setupPWA(){
+  // Manifeste et icônes : fichiers réels déclarés dans <head> (manifest.json, icons/)
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("sw.js",{scope:"./"}).catch(()=>{});
+  }
+
+  // Bouton Installer : toujours visible
+  const btn=$("#tbInstall");
+  const prompt=$("#installPrompt");
+  const isStandalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isSafari=/^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+  // Si déjà installé en mode standalone, masquer le bouton
+  if(isStandalone){
+    btn.style.display="none";
+    prompt.classList.remove("on");
+  }else{
+    btn.style.display="inline-flex";
+  }
+
+  let deferred=null;
+  window.addEventListener("beforeinstallprompt",e=>{
+    e.preventDefault();
+    deferred=e;
+    btn.style.display="inline-flex";
+    // Ne montrer la bannière que si pas déjà fermée
+    if(!localStorage.getItem("geo_install_dismissed")){
+      prompt.classList.add("on");
+    }
+  });
+  window.addEventListener("appinstalled",()=>{
+    btn.style.display="none";
+    prompt.classList.remove("on");
+    deferred=null;
+    localStorage.setItem("geo_install_dismissed","1");
+  });
+
+  function showManualInstructions(){
+    if(isIOS&&isSafari){
+      alert("Pour installer sur iPhone/iPad :\n\n1. Appuyez sur le bouton Partager (carré avec flèche vers le haut) en bas de Safari.\n2. Faites défiler et choisissez « Sur l'écran d'accueil ».\n3. Nommez l'application puis « Ajouter ».");
+    }else if(isIOS){
+      alert("Pour installer sur iOS :\n\nUtilisez Safari (pas Chrome ni Firefox) : bouton Partager → « Sur l'écran d'accueil ».");
+    }else{
+      alert("Pour installer :\n\n• Chrome / Edge / Brave : menu ⋮ (trois points) en haut à droite → « Installer l'application » ou « Ajouter à l'écran d'accueil ».\n• Firefox : menu ☰ → « Installer ».\n• Opera : menu → « Installer ».\n\nLe bouton officiel apparaîtra ici dès que votre navigateur détectera l'app comme installable (généralement après quelques secondes).");
+    }
+  }
+
+  const doInstall=async()=>{
+    if(deferred){
+      deferred.prompt();
+      try{
+        const {outcome}=await deferred.userChoice;
+        if(outcome==="accepted"){
+          prompt.classList.remove("on");
+          btn.style.display="none";
+        }
+      }catch(e){}
+      deferred=null;
+    }else{
+      showManualInstructions();
+    }
+  };
+  btn.onclick=doInstall;
+  $("#installBtn").onclick=doInstall;
+  $("#installClose").onclick=()=>{
+    prompt.classList.remove("on");
+    localStorage.setItem("geo_install_dismissed","1");
+  };
+})();
+
+/* ============================================================
+   THEME
+============================================================ */
+(function initTheme(){
+  const saved=localStorage.getItem("geo_theme");
+  if(saved==="light"||saved==="dark")document.documentElement.setAttribute("data-theme",saved);
+})();
+$("#tbTheme").onclick=()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  const next=cur==="light"?"dark":"light";
+  document.documentElement.setAttribute("data-theme",next);
+  localStorage.setItem("geo_theme",next);
+  $("#tbTheme").classList.toggle("on",next==="dark");
+};
+if(localStorage.getItem("geo_theme")==="dark")$("#tbTheme").classList.add("on");
+
+/* ============================================================
+   MODE RAPIDE
+============================================================ */
+$("#tbQuick").onclick=()=>{
+  document.body.classList.toggle("quick");
+  $("#tbQuick").classList.toggle("on",document.body.classList.contains("quick"));
+};
+
+/* ============================================================
+   CAURIS
+============================================================ */
+const caurisState={jets:[],currentJet:0,totalJets:16,nbCauris:12,animating:false,autoRunning:false,order:[]};
+for(let m=0;m<4;m++)for(let r=0;r<4;r++)caurisState.order.push({m,r});
+function caurisLabel(m,r){const d=["Feu","Air","Eau","Terre"];return `Mère ${m+1} · ${d[r]}`}
+function resetCauris(){
+  caurisState.jets=[];caurisState.currentJet=0;caurisState.animating=false;caurisState.autoRunning=false;
+  renderCaurisStage([]);
+  $("#caurisCount").textContent="Jet 0 / 16";
+  $("#caurisMsg").textContent="Prêt pour le premier jet…";
+  $("#caurisParity").innerHTML="";
+  $("#caurisHistory").innerHTML='<div style="color:var(--mut);font-style:italic">Aucun jet encore effectué.</div>';
+  updateCaurisInfo();
+}
+function renderCaurisStage(faces){
+  const stage=$("#caurisStage");
+  stage.querySelectorAll(".cauris").forEach(c=>c.remove());
+  const W=stage.clientWidth||600,H=stage.clientHeight||360;
+  const nb=faces.length,cx=W/2,cy=H/2,radius=Math.min(W,H)*0.32;
+  faces.forEach((face,i)=>{
+    const angle=(i/nb)*Math.PI*2-Math.PI/2;
+    const el=document.createElement("div");
+    el.className="cauris "+(face?"face-ouv":"face-ferm");
+    const fx=cx+Math.cos(angle)*radius,fy=cy+Math.sin(angle)*radius;
+    const ix=cx+(Math.random()-0.5)*30,iy=cy+(Math.random()-0.5)*30;
+    el.style.left="0px";el.style.top="0px";
+    el.style.transform=`translate(${ix}px,${iy}px) rotate(${Math.random()*360}deg)`;
+    el.dataset.fx=fx;el.dataset.fy=fy;el.dataset.face=face?"1":"0";
+    stage.appendChild(el);
+  });
+}
+async function animateThrow(){
+  const els=[...document.querySelectorAll("#caurisStage .cauris")];
+  els.forEach(el=>{el.classList.add("rolling");el.style.transition="none";});
+  await sleep(300);
+  els.forEach(el=>{
+    const fx=parseFloat(el.dataset.fx),fy=parseFloat(el.dataset.fy);
+    el.classList.remove("rolling");
+    el.style.transition="transform .9s cubic-bezier(.4,1.3,.6,1)";
+    el.style.transform=`translate(${fx}px,${fy}px) rotate(${(Math.random()*720-360).toFixed(0)}deg)`;
+    el.classList.add("landed");
+  });
+  await sleep(950);
+  els.forEach(el=>{
+    if(el.dataset.face==="1")el.classList.add("face-ouv");
+    else el.classList.remove("face-ouv");
+  });
+}
+function updateCaurisInfo(){
+  const j=caurisState.currentJet;
+  $("#ciProgress").textContent=`${j}/16`;
+  if(j===0){$("#ciCurrent").textContent="—";$("#ciParity").textContent="—";$("#ciCell").textContent="—";return;}
+  const last=caurisState.jets[j-1];
+  $("#ciCurrent").textContent=`Jet ${last.num}`;
+  $("#ciParity").textContent=last.parity===1?"impair → 1 pt":"pair → 2 pts";
+  $("#ciCell").textContent=last.cellLabel;
+}
+function updateCaurisHistory(){
+  const h=$("#caurisHistory");
+  if(!caurisState.jets.length){h.innerHTML='<div style="color:var(--mut);font-style:italic">Aucun jet encore effectué.</div>';return;}
+  h.innerHTML=caurisState.jets.map(j=>{
+    const cls=j.parity===1?"impair":"pair";
+    const symbol=j.parity===1?"●":"●●";
+    return `<div class="cauris-line"><span>Jet ${String(j.num).padStart(2," ")} · ${j.face} face(s) · ${j.cellLabel}</span><span class="${cls}">${symbol} ${j.parity===1?"1 pt":"2 pts"}</span></div>`;
+  }).join("");
+  h.scrollTop=h.scrollHeight;
+}
+function updateCaurisParityStrip(){
+  const strip=$("#caurisParity");
+  if(!caurisState.jets.length){strip.innerHTML="";return;}
+  strip.innerHTML=caurisState.jets.map(j=>`<span class="${j.parity===1?"odd":"even"}">J${j.num} · ${j.parity===1?"1":"2"}</span>`).join("");
+}
+async function throwOne(){
+  if(caurisState.animating)return false;
+  if(caurisState.currentJet>=16){$("#caurisMsg").textContent="✅ Les 16 jets sont terminés.";return false;}
+  caurisState.animating=true;
+  const cell=caurisState.order[caurisState.currentJet];
+  const nb=caurisState.nbCauris;
+  const faces=Array.from({length:nb},()=>Math.random()<0.5);
+  const nOuv=faces.filter(Boolean).length;
+  const parity=nOuv%2===1?1:2;
+  $("#caurisMsg").textContent=`Jet ${caurisState.currentJet+1}/16 — ${caurisLabel(cell.m,cell.r)}…`;
+  $("#caurisCount").textContent=`Jet ${caurisState.currentJet+1} / 16`;
+  renderCaurisStage(faces);
+  await sleep(50);
+  await animateThrow();
+  const jet={num:caurisState.currentJet+1,face:nOuv,total:nb,parity,cellM:cell.m,cellR:cell.r,cellLabel:caurisLabel(cell.m,cell.r)};
+  caurisState.jets.push(jet);
+  caurisState.currentJet++;
+  dots[cell.m][cell.r]=[];
+  if(parity===1)dots[cell.m][cell.r].push([50,50]);
+  else{dots[cell.m][cell.r].push([35,50]);dots[cell.m][cell.r].push([65,50]);}
+  draw();
+  updateCaurisHistory();updateCaurisParityStrip();updateCaurisInfo();
+  $("#caurisMsg").textContent=`✓ Jet ${jet.num} : ${nOuv} face(s) → ${parity===1?"impair (1 pt)":"pair (2 pts)"} — ${jet.cellLabel}`;
+  caurisState.animating=false;
+  if(caurisState.currentJet>=16)$("#caurisMsg").textContent="✅ Tirage complet. Thème ci-dessous.";
+  return true;
+}
+async function throwAuto(){
+  if(caurisState.autoRunning)return;
+  caurisState.autoRunning=true;
+  $("#caurisAuto").textContent="⏸ En cours…";
+  while(caurisState.currentJet<16&&caurisState.autoRunning){
+    const ok=await throwOne();
+    if(!ok)break;
+    await sleep(400);
+  }
+  caurisState.autoRunning=false;
+  $("#caurisAuto").textContent="▶️ Auto (16 jets)";
+}
+$("#tbCauris").onclick=()=>{
+  const p=$("#caurisPanel");p.classList.toggle("on");$("#tbCauris").classList.toggle("on",p.classList.contains("on"));
+  if(p.classList.contains("on")&&!caurisState.jets.length)resetCauris();
+  if(p.classList.contains("on"))p.scrollIntoView({behavior:"smooth",block:"start"});
+};
+$("#caurisThrow").onclick=()=>throwOne();
+$("#caurisAuto").onclick=()=>{if(caurisState.autoRunning)caurisState.autoRunning=false;else throwAuto();};
+$("#caurisReset").onclick=()=>{if(caurisState.animating||caurisState.autoRunning){caurisState.autoRunning=false;return;}if(!confirm("Réinitialiser le tirage cauris ?"))return;dots=[0,1,2,3].map(()=>[0,1,2,3].map(()=>[]));resetCauris();draw();};
+$("#caurisNb").onchange=e=>{caurisState.nbCauris=parseInt(e.target.value,10);resetCauris();};
+
+/* ============================================================
+   TOGGLES PANNEAUX
+============================================================ */
+function togglePanel(id,btnId){
+  const p=$(id);p.classList.toggle("on");$(btnId).classList.toggle("on",p.classList.contains("on"));
+  if(p.classList.contains("on"))p.scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("#tbNum").onclick=()=>{togglePanel("#num","#tbNum");if(lastResult)renderNum(lastResult);};
+$("#tbTarot").onclick=()=>{togglePanel("#tarot","#tbTarot");if(lastResult)renderTarot(lastResult);};
+$("#tbVersets").onclick=()=>{togglePanel("#versets","#tbVersets");if(lastResult)renderVersets(lastResult);};
+
+/* ============================================================
+   FRISE
+============================================================ */
+let showFrise=true;
+$("#tbFrise").onclick=()=>{showFrise=!showFrise;$("#tbFrise").classList.toggle("on",showFrise);const el=$("#frise");if(el)el.style.display=showFrise?"block":"none";};
+function renderFrise(c){
+  const periodes=[
+    {nom:"🌱 Racines",sub:"Fondations, passé proche",cls:"past",range:[0,4]},
+    {nom:"⚡ Présent",sub:"Action en cours",cls:"present",range:[4,8]},
+    {nom:"🎯 Futur",sub:"Aboutissement",cls:"future",range:[8,12]}
+  ];
+  const slots=c.H.map((v,i)=>{
+    const q=info(v);
+    const cls=periodes.find(p=>i>=p.range[0]&&i<p.range[1]).cls;
+    const short=HM[i].split(",")[0].trim();
+    return `<div class="tl-slot ${cls}" title="${esc(HM[i])} — ${q[0]}"><span class="num">M${i+1}</span><div class="fig">${svg(v,20)}</div><span class="lbl">${esc(short)}</span></div>`;
+  }).join("");
+  return `<div class="timeline"><div class="axis"></div><div class="now-marker"></div><div class="now-label">maintenant</div><div class="tl-grid">${slots}</div></div>
+  <div class="tl-sections">${periodes.map(p=>`<div><b>${p.nom}</b><span>${p.sub}</span></div>`).join("")}</div>`;
+}
+
+/* ============================================================
+   PRATICIEN
+============================================================ */
+const CK="geo_consultants",CAK="geo_active_consultant";
+function loadConsultants(){try{return JSON.parse(localStorage.getItem(CK)||"[]")}catch(e){return[]}}
+function saveConsultants(a){try{localStorage.setItem(CK,JSON.stringify(a))}catch(e){}}
+function getActiveConsId(){try{return localStorage.getItem(CAK)||""}catch(e){return""}}
+function setActiveConsId(id){try{localStorage.setItem(CAK,id)}catch(e){}}
+function getActiveCons(){return loadConsultants().find(c=>c.id===getActiveConsId())||null}
+function consName(id){if(!id)return "(sans consultant)";const c=loadConsultants().find(x=>x.id===id);return c?c.nom:"(supprimé)"}
+function countConsults(id){return ld().filter(x=>x.consultantId===id).length}
+function renderConsultantSelector(){
+  const list=loadConsultants(),cur=getActiveConsId(),sel=$("#consultantSel");
+  sel.innerHTML='<option value="">(sans consultant)</option>'+list.map(c=>`<option value="${c.id}"${c.id===cur?" selected":""}>${esc(c.nom)} (${countConsults(c.id)})</option>`).join("");
+  sel.onchange=()=>{setActiveConsId(sel.value);renderConsultantList();hist();};
+}
+function renderConsultantList(){
+  const list=loadConsultants(),cur=getActiveConsId(),el=$("#consultantList");
+  if(!list.length){el.innerHTML='<p class="note">Aucun consultant enregistré.</p>';return;}
+  el.innerHTML=list.map(c=>`<div class="consultant-row${c.id===cur?" active":""}"><div class="info"><b>${esc(c.nom)}${c.id===cur?' <span class="badge-consultant">actif</span>':""}</b><small>${countConsults(c.id)} consultation(s)${c.note?" · "+esc(c.note):""}</small></div>${c.id!==cur?`<button class="g" data-act="set" data-id="${c.id}">Activer</button>`:""}<button class="g danger" data-act="del" data-id="${c.id}" style="border-color:#ef4444;color:#ef4444">Suppr.</button></div>`).join("");
+  el.querySelectorAll("button").forEach(b=>{
+    b.onclick=()=>{
+      const id=b.dataset.id;
+      if(b.dataset.act==="set"){setActiveConsId(id);renderConsultantList();renderConsultantSelector();hist();}
+      else if(b.dataset.act==="del"){
+        if(!confirm("Supprimer ce consultant ?"))return;
+        saveConsultants(loadConsultants().filter(x=>x.id!==id));
+        if(getActiveConsId()===id)setActiveConsId("");
+        const h=ld().map(x=>x.consultantId===id?{...x,consultantId:""}:x);
+        try{localStorage.setItem(HK,JSON.stringify(h))}catch(e){}
+        renderConsultantList();renderConsultantSelector();hist();
+      }
+    };
+  });
+}
+$("#tbPraticien").onclick=()=>{togglePanel("#praticienPanel","#tbPraticien");renderConsultantList();};
+$("#addConsBtn").onclick=()=>{
+  const nom=$("#newConsNom").value.trim(),note=$("#newConsNote").value.trim();
+  if(!nom){alert("Entrez un nom.");return;}
+  const list=loadConsultants();
+  const c={id:uid(),nom,note,createdAt:new Date().toISOString()};
+  list.push(c);saveConsultants(list);
+  if(!getActiveConsId())setActiveConsId(c.id);
+  $("#newConsNom").value="";$("#newConsNote").value="";
+  renderConsultantList();renderConsultantSelector();
+};
+$("#exportAllCons").onclick=()=>{
+  const data={version:1,exportedAt:new Date().toISOString(),consultants:loadConsultants(),activeId:getActiveConsId(),consultations:ld()};
+  fallbackDownload(new Blob([JSON.stringify(data,null,2)],{type:"application/json;charset=utf-8"}),`geomancie-dossiers-${new Date().toISOString().slice(0,10)}.json`);
+};
+$("#clearAllCons").onclick=()=>{if(!confirm("Effacer tous les consultants ?"))return;saveConsultants([]);setActiveConsId("");renderConsultantList();renderConsultantSelector();hist();};
+
+/* ============================================================
+   BIBLIOTHEQUE
+============================================================ */
+function renderLibrary(){
+  $("#libGrid").innerHTML=Object.keys(T).map(k=>{
+    const v=k.split("").map(Number),i=info(v);
+    const tagCls=i[4]>0?"p":i[4]<0?"n":"z";
+    const tagLabel=i[4]>0?"favorable":i[4]<0?"défavorable":"neutre";
+    return `<div class="libcard">${svg(v,30)}<div class="lt"><b>${i[0]}</b><span class="tag ${tagCls}">${tagLabel}</span><div style="margin-top:5px">${i[3]}</div><div class="fmeta">Planète : <b>${i[1]}</b> · Jour : ${i[2]}<br>Code : ${k}</div></div></div>`;
+  }).join("");
+}
+$("#tbLib").onclick=()=>{togglePanel("#lib","#tbLib");renderLibrary();};
+
+/* ============================================================
+   SAUVEGARDER / RESTAURER
+============================================================ */
+$("#tbSave").onclick=()=>{
+  try{
+    const data={version:1,exportedAt:new Date().toISOString(),historique:ld(),consultants:loadConsultants(),activeConsId:getActiveConsId(),parametres:{PR,CITY,TD,NOA,QT},derniereConsultation:lastResult?{H:lastResult.H,TD:lastResult.TD,TG:lastResult.TG,J:lastResult.J,C:lastResult.C,question:$("#qt").value,domaine:$("#q").value}:null};
+    fallbackDownload(new Blob([JSON.stringify(data,null,2)],{type:"application/json;charset=utf-8"}),`geomancie-sauvegarde-${new Date().toISOString().slice(0,10)}.json`);
+    const btn=$("#tbSave"),old=btn.textContent;btn.textContent="✅ Sauvegardé";setTimeout(()=>btn.textContent=old,1800);
+  }catch(e){alert("Erreur : "+e.message);}
+};
+$("#tbLoad").onclick=()=>$("#fileIn").click();
+$("#fileIn").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(!confirm("Restaurer cette sauvegarde ?"))return;
+      if(d.historique)localStorage.setItem(HK,JSON.stringify(d.historique));
+      if(d.consultants)saveConsultants(d.consultants);
+      if(d.activeConsId)setActiveConsId(d.activeConsId);
+      if(d.parametres){
+        if(d.parametres.PR)PR=Object.assign(PR,d.parametres.PR);
+        if(d.parametres.CITY)CITY=d.parametres.CITY;
+        if(d.parametres.TD)TD=d.parametres.TD;
+        if(d.parametres.NOA!==undefined)NOA=d.parametres.NOA;
+        if(d.parametres.QT)QT=d.parametres.QT;
+      }
+      hist();renderConsultantSelector();renderConsultantList();renderLibrary();
+      alert("Sauvegarde restaurée.");
+    }catch(err){alert("Fichier invalide : "+err.message);}
+    finally{e.target.value="";}
+  };
+  r.readAsText(f);
+};
+
+/* ============================================================
+   PARTAGE
+============================================================ */
+$("#tbShare").onclick=async()=>{
+  const qt=$("#qt").value.trim()||"(sans question)",dom=$("#q").value;
+  const cons=getActiveCons(),consTxt=cons?`👤 ${cons.nom}\n`:"";
+  let text="";
+  if(lastResult){
+    const c=lastResult,J=info(c.J),C=info(c.C);
+    const sg=c.H.map(f=>Math.sign(info(f)[4])),np=sg.filter(x=>x>0).length,nn=sg.filter(x=>x<0).length;
+    text=`🔮 Consultation géomantique\n${consTxt}\n❓ ${qt}\n📁 ${dom}\n\n⚖️ Juge : ${J[0]} — ${J[3]}\n🎯 Conciliateur : ${C[0]} — ${C[3]}\n\n📊 ${np} favorables · ${nn} défavorables · ${12-np-nn} neutres`;
+  }else text=`🔮 Géomancie\n${consTxt}\nQuestion : ${qt}\nDomaine : ${dom}`;
+  try{if(navigator.share)await navigator.share({title:"Consultation géomantique",text});else window.open(`https://wa.me/?text=${encodeURIComponent(text)}`,"_blank","noopener");}catch(e){}
+};
+
+/* ============================================================
+   DESSIN / CALCUL
+============================================================ */
+function svg(v,s=34){let o=`<svg class="f" width="${s}" height="${s*1.5}" viewBox="0 0 40 60" fill="currentColor">`;
+v.forEach((x,i)=>{const y=8+i*14,c=`fill="${EC[i]}"`;o+=x==1?`<circle ${c} cx="20" cy="${y}" r="4.5"/>`:`<circle ${c} cx="12" cy="${y}" r="4.5"/><circle ${c} cx="28" cy="${y}" r="4.5"/>`});return o+"</svg>"}
+const add=(a,b)=>a.map((x,i)=>x===b[i]?2:1);
+function calc(M){const F=[0,1,2,3].map(r=>M.map(m=>m[r]));
+const N=[add(M[0],M[1]),add(M[2],M[3]),add(F[0],F[1]),add(F[2],F[3])];
+const TD=add(N[0],N[1]),TG=add(N[2],N[3]),J=add(TD,TG),C=add(J,M[0]);
+return{H:[...M,...F,...N],TD,TG,J,C}}
+const tag=n=>n>0?'<span class="tag p">favorable</span>':n<0?'<span class="tag n">défavorable</span>':'<span class="tag z">neutre / mixte</span>';
+const tagTxt=n=>n>0?"favorable":n<0?"défavorable":"neutre / mixte";
+const tagColor=n=>n>0?"#15803d":n<0?"#c62828":"#b7791f";
+
+function draw(){
+let h='';
+for(let i=0;i<4;i++)h+=`<div class="hd">Mère ${i+1}</div>`;
+for(let r=0;r<4;r++){for(let m=0;m<4;m++){const d=dots[m][r];
+h+=`<div class="cell" data-m="${m}" data-r="${r}">${m===0?`<div style="position:absolute;top:2px;left:4px;font-size:10px;font-weight:700;color:${EC[r]}">${R[r]}</div>`:""}${d.map(p=>`<i class="dot" style="left:${p[0]}%;top:${p[1]}%;background:${EC[r]}"></i>`).join("")}<span class="cn">${d.length||""}</span></div>`}}
+$("#sand").innerHTML=h;
+const M=[];let ok=true;
+for(let m=0;m<4;m++){const v=[0,1,2,3].map(r=>dots[m][r].length?(dots[m][r].length%2?1:2):0);M.push(v);if(v.includes(0))ok=false;}
+$("#names").innerHTML=M.map(v=>v.includes(0)?'<div>…</div>':`<div>${svg(v,22)}${info(v)[0]}</div>`).join("");
+if(ok){result(M)}else{$("#out").innerHTML='<div class="card note">Complétez les 16 cases pour obtenir le thème.</div>';lastResult=null;}
+}
+
+function result(M){
+const c=calc(M);lastResult=c;
+const cnt={};c.H.concat([c.TD,c.TG,c.J,c.C]).forEach(v=>{const k=v.join("");cnt[k]=(cnt[k]||0)+1});
+const J=info(c.J),C=info(c.C);let ver,verLong,quickTxt;
+if(J[4]>0&&C[4]>0){ver="Réponse très favorable : le Juge et le Conciliateur concordent.";verLong="Les deux figures de synthèse sont favorables : direction bonne, fin conforme au début.";quickTxt="✅ Oui, très favorable";}
+else if(J[4]>0&&C[4]<0){ver="Favorable au départ, prudence sur la fin.";verLong="Le Juge est favorable mais le Conciliateur défavorable : la fin réserve une réserve ou un retard.";quickTxt="⚠️ Oui, mais prudence sur la fin";}
+else if(J[4]<0&&C[4]>0){ver="Obstacles au départ, issue finale positive.";verLong="Le Juge défavorable mais le Conciliateur favorable : débuts difficiles, fin éclaircie.";quickTxt="🔄 Difficile au début, mieux à la fin";}
+else if(J[4]<0&&C[4]<0){ver="Réponse défavorable : reporter ou reconsidérer.";verLong="Le Juge et le Conciliateur défavorables : blocage ou perte probable.";quickTxt="❌ Non, reporter ou revoir";}
+else{ver="Réponse nuancée.";verLong="Le Juge ou le Conciliateur sont neutres : dépend du contexte.";quickTxt="⚖️ Nuancé — voir le détail";}
+const key=(t,v)=>{const i=info(v);return`<div class="key">${svg(v,26)}<div><b>${t} : ${i[0]}</b> ${tag(i[4])}<br><small>${i[3]} Planète : ${i[1]}.</small></div></div>`};
+const rep=Object.entries(cnt).filter(e=>e[1]>=3).map(e=>`${T[e[0]][0]} ×${e[1]}`).join(", ")||"aucune";
+let tal=C[4]>0?C:J[4]>0?J:T["2211"];
+const h=Q[$("#q").value],v=c.H[h-1],i=info(v),qt=$("#qt").value.trim(),n=k=>info(k)[0];
+const cons=getActiveCons();
+const consTxt=cons?`Consultant : ${cons.nom}\n`:"";
+const adv=i[4]>0?"La maison de votre question est porteuse : vous pouvez avancer.":i[4]<0?"La maison est freinée : préparez des alternatives.":"La maison est neutre : avancez avec prudence.";
+const txt=`${consTxt}Question : ${qt?"« "+qt+" »":"(non précisée)"}\nDomaine : ${$("#q").value} (maison ${h}, ${HM[h-1]})\n\nMaison ${h} : ${i[0]} — ${i[3]}\nTémoin droit : ${n(c.TD)} · Témoin gauche : ${n(c.TG)}\nJuge : ${J[0]} — ${J[3]}\nConciliateur : ${C[0]} — ${C[3]}\n\nConclusion : ${ver}\n${verLong}\n\nConseil : ${adv}`;
+const friseHTML=showFrise?`<div class="card" id="frise"><h2>⏳ Frise temporelle</h2>${renderFrise(c)}</div>`:"";
+const consBadge=cons?`<span class="badge-consultant">👤 ${esc(cons.nom)}</span>`:"";
+const caurisBadge=caurisState.currentJet>=16?`<span class="badge-consultant">🐚 Cauris</span>`:"";
+
+$("#out").innerHTML=`<div class="card"><h2>Thème ${consBadge} ${caurisBadge}</h2><div class="h12">${c.H.map((vv,ii)=>`<div class="hc" style="border-top:3px solid ${["var(--ko)","var(--ne)","var(--ok)"][Math.sign(info(vv)[4])+1]}"><b>M${ii+1}</b>${svg(vv,22)}${info(vv)[0]}</div>`).join("")}</div><div class="note">Maisons 1–4 : Mères · 5–8 : Filles · 9–12 : Nièces</div></div>
+${friseHTML}
+<div class="card"><h2>Réponse</h2>
+<div class="verdict" style="font-size:17px;text-align:center;margin-bottom:10px">${quickTxt}</div>
+${key("Témoin droit (consultant)",c.TD)}${key("Témoin gauche (question)",c.TG)}${key("Juge",c.J)}${key("Conciliateur",c.C)}
+<div class="verdict">${ver}</div><p style="margin:10px 0 0;font-size:14px">${verLong}</p>
+<p class="note">Figures répétées : ${rep}</p></div>
+<div class="card"><h2>Résumé d'interprétation</h2><div id="qa"></div><pre id="sum"></pre><div class="row"><button id="cp">Copier</button><button class="g" id="sv">Enregistrer</button><button class="g" id="nw">← Nouvelle consultation</button></div></div>
+<div class="card"><h2>Détail par maison</h2><div id="det"></div></div>
+<div class="card" id="tal"></div>
+<div class="card" id="sac"></div>`;
+
+$("#qa").innerHTML=`<div class="key">${svg(v,26)}<div><b>Maison ${h} (${HM[h-1]}) : ${i[0]}</b> ${tag(i[4])}<br><small>${i[3]} Planète : ${i[1]}.</small></div></div><p style="margin:8px 0 0;font-size:14px">${HD[h-1][i[4]>0?0:i[4]<0?1:2]}</p>`;
+$("#sum").textContent=txt;
+renderTal(tal===C?c.C:tal===J?c.J:[2,2,1,1],tal);renderSac(c,h);
+if($("#frise")){document.querySelectorAll(".tl-slot").forEach((el,idx)=>{el.onclick=()=>{const dets=document.querySelectorAll("#det details");if(dets[idx]){dets[idx].open=true;dets[idx].scrollIntoView({behavior:"smooth",block:"center"});}};});}
+const sg=c.H.map(f=>Math.sign(info(f)[4])),np=sg.filter(x=>x>0).length,nn=sg.filter(x=>x<0).length;
+$("#det").innerHTML=c.H.map((f,k)=>{const q=info(f);return`<details${k+1===h?" open":""}><summary><b>${k+1}. ${HM[k]}</b> — ${q[0]} ${tag(q[4])}${k+1===h?" ★":""}</summary><div class="key">${svg(f,26)}<div>${HD[k][q[4]>0?0:q[4]<0?1:2]}<br><br><small>${q[3]} Planète : ${q[1]}.</small></div></div></details>`}).join("")+`<div class="note">★ = maison de votre question. Sur 12 maisons : ${np} favorables, ${nn} défavorables, ${12-np-nn} neutres.</div>`;
+$("#cp").onclick=async()=>{try{await navigator.clipboard.writeText(txt);$("#cp").textContent="Copié ✓"}catch(e){const r=document.createRange();r.selectNodeContents($("#sum"));const g=getSelection();g.removeAllRanges();g.addRange(r);$("#cp").textContent="Texte sélectionné"}};
+$("#nw").onclick=()=>{$("#clr").click();$("#qt").value="";resetCauris();scrollTo({top:0,behavior:"smooth"})};
+$("#sv").onclick=()=>{try{const a=ld();a.unshift({d:new Date().toLocaleString("fr-FR"),q:qt,j:J[0],c:C[0],v:ver,consultantId:getActiveConsId()});localStorage.setItem(HK,JSON.stringify(a.slice(0,50)));}catch(e){}hist();renderConsultantSelector();renderConsultantList();$("#sv").textContent="Enregistré ✓";};
+
+// Rendu automatique des modules si ouverts
+if($("#num").classList.contains("on"))renderNum(c);
+if($("#tarot").classList.contains("on"))renderTarot(c);
+if($("#versets").classList.contains("on"))renderVersets(c);
+}
+
+/* ============================================================
+   HISTORIQUE
+============================================================ */
+const HK="geo_hist";
+function ld(){try{return JSON.parse(localStorage.getItem(HK)||"[]")}catch(e){return[]}}
+function hist(){
+  const a=ld(),cur=getActiveConsId(),filtered=cur?a.filter(x=>x.consultantId===cur):a;
+  if(!a.length){$("#hist").innerHTML="";return;}
+  const cons=getActiveCons();
+  const title=cons?`Historique — ${esc(cons.nom)}`:"Historique";
+  $("#hist").innerHTML=`<div class="card"><h2>${title}</h2>
+    ${cur?`<p class="note">Filtre : ${filtered.length} / ${a.length}. <button class="g" id="showAllHist" style="padding:3px 8px;font-size:11px">Voir tout</button></p>`:""}
+    <div style="display:grid;grid-template-columns:1fr;gap:8px">${filtered.map(x=>`<div class="key"><div><b>${esc(x.d)}</b>${x.consultantId?` <span class="badge-consultant">${esc(consName(x.consultantId))}</span>`:""}<br>${esc(x.q)||"(sans question)"}<br><small>Juge ${esc(x.j)} · Conciliateur ${esc(x.c)}</small><br><small>${esc(x.v)}</small></div></div>`).join("")}</div>
+    <button class="g" id="hc">Vider l'historique</button></div>`;
+  const hc=$("#hc");
+  if(hc)hc.onclick=()=>{if(!confirm("Confirmer la suppression ?"))return;try{if(cur)localStorage.setItem(HK,JSON.stringify(a.filter(x=>x.consultantId!==cur)));else localStorage.removeItem(HK);}catch(e){}hist();renderConsultantSelector();renderConsultantList();};
+  const sa=$("#showAllHist");
+  if(sa)sa.onclick=()=>{setActiveConsId("");renderConsultantSelector();renderConsultantList();hist();};
+}
+
+/* ============================================================
+   TALISMAN / SACRIFICE
+============================================================ */
+const CH=["Saturne","Jupiter","Mars","Soleil","Vénus","Mercure","Lune"],DR=["Soleil","Lune","Mars","Mercure","Jupiter","Vénus","Saturne"],JS_=["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],wd={Soleil:0,Lune:1,Mars:2,Mercure:3,Jupiter:4,Vénus:5,Saturne:6};
+const CV={Abidjan:[5.36,-4.03,0],Niamey:[13.51,2.11,1],Bamako:[12.64,-8,0],Ouagadougou:[12.37,-1.52,0],Dakar:[14.69,-17.44,0],Conakry:[9.64,-13.71,0],Cotonou:[6.37,2.43,1],Lomé:[6.13,1.22,0],Accra:[5.6,-0.19,0]};
+let CITY="Abidjan",TD="",TP="",ET="",ES="",NOA=false,QT={};
+let PR=Object.assign({colaB:100,colaR:100,coqB:3000,coqR:3000,lait:800,mil:600,miel:3000,repas:1000,aum:100},(()=>{try{return JSON.parse(localStorage.getItem("geo_pr")||"{}")}catch(e){return{}}})());
+const pad=n=>String(n).padStart(2,"0"),RD=Math.PI/180;
+function sunT(y,m,d,la,lo){const N=Math.floor((Date.UTC(y,m,d)-Date.UTC(y,0,0))/864e5),g=2*Math.PI/365*(N-1),
+eq=229.18*(.000075+.001868*Math.cos(g)-.032077*Math.sin(g)-.014615*Math.cos(2*g)-.040849*Math.sin(2*g)),
+de=.006918-.399912*Math.cos(g)+.070257*Math.sin(g)-.006758*Math.cos(2*g)+.000907*Math.sin(2*g)-.002697*Math.cos(3*g)+.00148*Math.sin(3*g),
+ha=Math.acos(Math.cos(90.833*RD)/(Math.cos(la*RD)*Math.cos(de))-Math.tan(la*RD)*Math.tan(de))/RD;
+return[720-4*(lo+ha)-eq,720-4*(lo-ha)-eq]}
+function renderTal(v,t){
+const P=t[1]==="Nœud nord"?"Jupiter":t[1]==="Nœud sud"?"Saturne":t[1];
+if(TP!==P||!TD){TP=P;const q=new Date();for(let i=0;i<7&&q.getDay()!==wd[P];i++)q.setDate(q.getDate()+1);TD=`${q.getFullYear()}-${pad(q.getMonth()+1)}-${pad(q.getDate())}`}
+const[y,m,d]=TD.split("-").map(Number),[la,lo,tz]=CV[CITY],a=sunT(y,m-1,d,la,lo),b=sunT(y,m-1,d+1,la,lo),ri=a[0],se=a[1],r2=b[0]+1440,dl=(se-ri)/12,nl=(r2-se)/12,
+dow=new Date(Date.UTC(y,m-1,d)).getUTCDay(),o=CH.indexOf(DR[dow]),
+H=[...Array(24)].map((_,i)=>({i,s:i<12?ri+i*dl:se+(i-12)*nl,e:i<12?ri+(i+1)*dl:se+(i-11)*nl,p:CH[(o+i)%7]})),
+f=x=>{x=(Math.round(x+tz*60)%1440+1440)%1440;return pad(Math.floor(x/60))+":"+pad(x%60)},
+hp=H.filter(x=>x.p===P),ln=x=>`${x.i<12?"J":"N"}${x.i%12+1} ${f(x.s)}–${f(x.e)}`;
+const el=$("#tal");if(!el)return;
+el.innerHTML=`<h2>Talisman et heure planétaire</h2>
+<div class="key">${svg(v,26)}<div><b>${t[0]}</b> — planète ${t[1]}, jour : ${t[2]}<br><small>${t[3]}</small></div></div>
+<div class="row"><select id="cty">${Object.keys(CV).map(k=>`<option${k===CITY?" selected":""}>${k}</option>`).join("")}</select><input type="date" id="tdt" value="${TD}"></div>
+<p>${JS_[dow]} ${d}/${m}/${y} — lever <b>${f(ri)}</b>, coucher <b>${f(se)}</b><br>Heure de jour : <b>${dl.toFixed(1)} min</b> · heure de nuit : <b>${nl.toFixed(1)} min</b></p>
+<div class="verdict">Heures de ${P} ce jour-là :<br>${hp.map(x=>`<span class="chip">${ln(x)}</span>`).join("")}</div>
+<details><summary>Table des 24 heures</summary><div class="hg">${H.map(x=>`<div${x.p===P?' class="m"':''}>${ln(x)} · ${x.p}</div>`).join("")}</div></details>`;
+$("#cty").onchange=e=>{CITY=e.target.value;renderTal(v,t)};
+$("#tdt").onchange=e=>{if(e.target.value){TD=e.target.value;renderTal(v,t)}};
+ET=`TALISMAN ET HEURE PLANÉTAIRE\nFigure : ${t[0]} (${t[1]}, ${t[2]})\nLieu : ${CITY} — ${JS_[dow]} ${d}/${m}/${y}\nLever ${f(ri)} · coucher ${f(se)} · heure de jour ${dl.toFixed(1)} min · heure de nuit ${nl.toFixed(1)} min\nHeures de ${P} : ${hp.map(ln).join(" ; ")}`}
+
+const SM={Via:"lait",Populus:"lait",Conjunctio:"colaB",Carcer:"mil","Fortuna Major":"coqB","Fortuna Minor":"colaB",Acquisitio:"repas",Amissio:"miel",Laetitia:"repas",Tristitia:"mil",Puer:"colaR",Puella:"miel",Albus:"colaB",Rubeus:"coqR","Caput Draconis":"aum","Cauda Draconis":"aum"};
+const OL={colaB:["noix de cola blanche","noix"],colaR:["noix de cola rouge","noix"],coqB:["coq blanc","coq"],coqR:["coq rouge","coq"],lait:["lait frais","litre(s)"],mil:["mil ou riz","kg"],miel:["miel","pot(s)"],repas:["repas partagé","repas"],aum:["aumône (pièces de 100 F)","pièce(s)"]};
+const QR={colaB:p=>p,colaR:p=>p,repas:p=>p,aum:p=>p,lait:p=>Math.ceil(p/2),mil:p=>Math.ceil(p/2),miel:p=>Math.ceil(p/4),coqB:()=>1,coqR:()=>1};
+const money=n=>n.toLocaleString("fr-FR")+" F CFA";
+function renderSac(c,h){
+const R=[["Juge",c.J],["Conciliateur",c.C],[`Maison ${h} (question)`,c.H[h-1]]];let tot=0,tx="";
+const rows=R.map(([r,v])=>{const q=info(v),k=SM[q[0]],p=v.reduce((x,y)=>x+y,0),key=r+q[0],n=QT[key]??QR[k](p),lab=k.startsWith("coq")&&NOA?["don d'aumône équivalent","don"]:OL[k],sub=n*PR[k];tot+=sub;
+tx+=`\n${r} — ${q[0]} (${p} points) : ${n} ${lab[1]} · ${lab[0]} × ${PR[k]} F = ${money(sub)}`;
+return`<div class="key">${svg(v,24)}<div><b>${r} : ${q[0]}</b> ${tag(q[4])}<br>Offrande : <input type="number" min="0" class="qi" data-k="${esc(key)}" value="${n}"> ${lab[1]} · ${lab[0]}<br><small>${n} × ${PR[k]} F = <b>${money(sub)}</b></small></div></div>`}).join("");
+const el=$("#sac");if(!el)return;
+el.innerHTML=`<h2>Sacrifice associé (simulation)</h2>
+<p class="note">Correspondances illustratives — validez-les avec un praticien.</p>${rows}
+<label><input type="checkbox" id="noa"${NOA?" checked":""}> Sans animal</label>
+<div class="verdict">Total estimé : <b>${money(tot)}</b></div>`;
+document.querySelectorAll(".qi").forEach(i=>i.onchange=()=>{QT[i.dataset.k]=Math.max(0,+i.value||0);renderSac(c,h)});
+const na=$("#noa");if(na)na.onchange=e=>{NOA=e.target.checked;renderSac(c,h)};
+ES=`SACRIFICE ASSOCIÉ (illustratif)\n${tx}\nTotal estimé : ${money(tot)}${NOA?" (sans animal)":""}`}
+
+/* ============================================================
+   EXPORT WORD
+============================================================ */
+$("#docx").onclick=async()=>{
+  const btn=$("#docx"),old=btn.textContent;
+  btn.textContent="Génération…";btn.disabled=true;
+  try{
+    const st=new Date().toISOString().slice(0,10),now=new Date().toLocaleString("fr-FR");
+    const qt=$("#qt").value.trim()||"(non précisée)",dom=$("#q").value,c=lastResult;
+    const html=buildWordHTML(qt,dom,c,now,st);
+    const blob=new Blob(['\ufeff',html],{type:"application/msword;charset=utf-8"});
+    const fname=`geomancie-${st}.doc`;
+    if(window.claude&&window.claude.use){
+      try{const D=await window.claude.use("downloads");if(D&&D.save)await D.save({filename:fname,data:blob});else fallbackDownload(blob,fname);}
+      catch(e){fallbackDownload(blob,fname);}
+    }else fallbackDownload(blob,fname);
+    btn.textContent="Word ✓";setTimeout(()=>btn.textContent=old,2000);
+  }catch(e){console.error(e);alert("Erreur : "+e.message);btn.textContent=old;}
+  finally{btn.disabled=false;}
+};
+function fallbackDownload(blob,fname){
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fname;
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},100);
+}
+function buildWordHTML(qt,dom,c,now,st){
+  if(!c)return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>Consultation</title></head><body><h1>Consultation géomantique</h1><p>Aucun thème complet.</p></body></html>`;
+  const h=Q[dom],v=c.H[h-1],i=info(v);
+  const J=info(c.J),C=info(c.C);
+  const sg=c.H.map(f=>Math.sign(info(f)[4])),np=sg.filter(x=>x>0).length,nn=sg.filter(x=>x<0).length;
+  const cons=getActiveCons();
+  const consLine=cons?`<p><b>Consultant :</b> ${esc(cons.nom)}</p>`:"";
+  let ver,verLong;
+  if(J[4]>0&&C[4]>0){ver="Réponse très favorable.";verLong="Les deux figures de synthèse sont favorables.";}
+  else if(J[4]>0&&C[4]<0){ver="Favorable au départ, prudence à la fin.";}
+  else if(J[4]<0&&C[4]>0){ver="Obstacles au départ, issue positive.";}
+  else if(J[4]<0&&C[4]<0){ver="Réponse défavorable.";}
+  else{ver="Réponse nuancée.";}
+  const jugeV=VERSETS_FIG[J[0]]||BASMALA;
+  const numJuge=reduceNum(sumPoints(c.J));
+  const arcJ=TAROT_MAP[J[0]]||{nom:"—",n:"—"};
+  const adv=i[4]>0?"Vous pouvez avancer.":i[4]<0?"Préparez des alternatives.":"Avancez avec prudence.";
+  const rowsTheme=c.H.map((f,k)=>{const q=info(f);return `<tr><td style="border:1px solid #ccc;padding:4px;text-align:center;font-weight:bold">M${k+1}</td><td style="border:1px solid #ccc;padding:4px;font-weight:bold">${esc(q[0])}</td><td style="border:1px solid #ccc;padding:4px;text-align:center;color:${tagColor(q[4])};font-weight:bold">${tagTxt(q[4])}</td><td style="border:1px solid #ccc;padding:4px;font-size:11px">${esc(q[3])}</td><td style="border:1px solid #ccc;padding:4px;text-align:center;font-size:11px">${esc(q[1])}</td></tr>`}).join("");
+  const keyBlock=(t,v)=>{const q=info(v);return`<p style="margin:6px 0;padding:6px 8px;border-left:3px solid #1d4ed8;background:#f4f7fb"><b>${esc(t)} : ${esc(q[0])}</b> <span style="color:${tagColor(q[4])};font-weight:bold">(${tagTxt(q[4])})</span></p>`};
+  const detBlocks=c.H.map((f,k)=>{const q=info(f);return `<h3 style="color:#0b1f5c;margin:14px 0 4px;font-size:13px">${k+1}. ${esc(HM[k])} — ${esc(q[0])} (${tagTxt(q[4])})${k+1===h?" ★":""}</h3><p style="margin:0 0 4px;font-size:12px">${esc(HD[k][q[4]>0?0:q[4]<0?1:2])}</p>`}).join("");
+  return `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>Consultation géomantique ${st}</title><style>@page{size:A4;margin:18mm 16mm}body{font:12pt 'Segoe UI',Arial,sans-serif;color:#111;line-height:1.4;max-width:180mm;margin:0 auto}h1{color:#0b1f5c;font-size:18pt;text-align:center;margin:0 0 4px}h2{color:#1d4ed8;font-size:13pt;margin:18px 0 6px;border-left:4px solid #1d4ed8;padding-left:8px}h3{color:#0b1f5c;font-size:11pt;margin:12px 0 4px}.sub{text-align:center;color:#555;font-size:10pt;font-style:italic;margin:0 0 14px}table{border-collapse:collapse;width:100%;margin:8px 0 14px}td,th{border:1px solid #b8c4d0;padding:5px 7px;vertical-align:top;font-size:10.5pt}th{background:#e8eef5;color:#0b1f5c;font-weight:bold;text-align:center}.verdict{padding:8px 10px;border-left:4px solid #d4a843;background:#fef9e7;font-weight:bold;margin:10px 0}.ar{font-size:16pt;text-align:right;color:#9a5b1e;direction:rtl}.footer{margin-top:24px;padding-top:8px;border-top:1px solid #ccc;text-align:center;font-size:9pt;color:#666;font-style:italic}</style></head><body>
+<h1>Consultation géomantique · ʿilm al-raml</h1><p class="sub">${esc(now)}</p>
+${consLine}
+<h2>Question</h2><p><b>Question :</b> « ${esc(qt)} »</p><p><b>Domaine :</b> ${esc(dom)} (maison ${h}, ${esc(HM[h-1])})</p>
+<h2>Thème — 12 maisons</h2><table><tr><th style="width:8%">Maison</th><th style="width:22%">Figure</th><th style="width:18%">Verdict</th><th style="width:38%">Description</th><th style="width:14%">Planète</th></tr>${rowsTheme}</table>
+<h2>Réponse</h2>${keyBlock("Témoin droit",c.TD)}${keyBlock("Témoin gauche",c.TG)}${keyBlock("Juge",c.J)}${keyBlock("Conciliateur",c.C)}<div class="verdict">${esc(ver)}</div>
+<h2>Maison de votre question — Maison ${h} (${esc(HM[h-1])})</h2><p><b>${esc(i[0])}</b> — <span style="color:${tagColor(i[4])};font-weight:bold">${tagTxt(i[4])}</span></p><p>${esc(HD[h-1][i[4]>0?0:i[4]<0?1:2])}</p><p><b>Conseil :</b> ${esc(adv)}</p>
+<h2>🔢 Numérologie</h2>
+<p><b>Nombre du Juge :</b> ${numJuge} (${NUM_PLANETS[numJuge]?NUM_PLANETS[numJuge].nom:"—"})<br>
+<b>Nombre du consultant :</b> ${reduceNum(sumPoints(c.TD))}<br>
+<b>Nombre du Conciliateur :</b> ${reduceNum(sumPoints(c.C))}</p>
+<h2>🎴 Tarot — carte du Juge</h2>
+<p><b>${arcJ.nom}</b> (arcane ${arcJ.n}) — figure géomantique <b>${esc(J[0])}</b></p>
+<h2>📖 Verset du Juge à réciter</h2>
+<p class="ar">${jugeV.ar}</p>
+<p><i>${esc(jugeV.translit)}</i></p>
+<p>${esc(jugeV.fr)}</p>
+<p><b>${esc(jugeV.ref)}</b> — réciter <b>${jugeV.rec}×</b></p>
+<h2>Détail par maison</h2>${detBlocks}
+<h2>Synthèse</h2><p>Sur 12 maisons : <b>${np} favorables</b>, <b>${nn} défavorables</b>, <b>${12-np-nn} neutres</b>.</p>
+${ET?`<h2>Talisman et heure planétaire</h2><pre style="font-family:Consolas,monospace;font-size:10pt;background:#f1f5f9;padding:8px">${esc(ET)}</pre>`:""}
+${ES?`<h2>Sacrifice associé</h2><pre style="font-family:Consolas,monospace;font-size:10pt;background:#f1f5f9;padding:8px">${esc(ES)}</pre>`:""}
+<p class="footer">Fiche générée automatiquement.</p></body></html>`;
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+$("#q").innerHTML=Object.keys(Q).map(k=>`<option>${k}</option>`).join("");
+$("#q").onchange=draw;
+$("#qt").oninput=()=>{const t=$("#qt").value.toLowerCase();const K=[[/argent|financ|pay|commande|budget|prix|salaire/,"Argent, moyens financiers"],[/contrat|mariage|partenar|procès|litige|associ/,"Contrat, mariage, adversaire"],[/voyage|étude|visa/,"Voyage, études"],[/santé|malad|travail/,"Santé, travail quotidien"],[/maison|foyer|immobilier|famille|terrain/,"Foyer, immobilier"],[/carrière|projet|emploi|promotion|entreprise/,"Carrière, projet pro"],[/\bami|espoir/,"Amis, espoirs"]];const k=K.find(x=>x[0].test(t));if(k)$("#q").value=k[1];draw()};
+hist();
+renderConsultantSelector();
+renderConsultantList();
+$("#tbFrise").classList.add("on");
+resetCauris();
+$("#sand").addEventListener("click",e=>{const c=e.target.closest(".cell");if(!c)return;const b=c.getBoundingClientRect();
+const m=+c.dataset.m,r=+c.dataset.r;dots[m][r].push([(e.clientX-b.left)/b.width*100,(e.clientY-b.top)/b.height*100]);last=[m,r];draw()});
+$("#undo").onclick=()=>{if(last){dots[last[0]][last[1]].pop();draw()}};
+$("#clr").onclick=()=>{dots=[0,1,2,3].map(()=>[0,1,2,3].map(()=>[]));last=null;resetCauris();draw()};
+$("#rnd").onclick=()=>{dots=dots.map(col=>col.map(()=>Array.from({length:1+Math.floor(Math.random()*12)},()=>[8+Math.random()*84,8+Math.random()*84])));draw()};
+$("#go").onclick=()=>{$("#qt").scrollIntoView({behavior:"smooth",block:"center"});$("#qt").focus({preventScroll:true})};
+$("#bk").onclick=()=>scrollTo({top:0,behavior:"smooth"});
+addEventListener("scroll",()=>{$("#bk").style.display=scrollY>250?"block":"none"});
+draw();
+</script></body></html>
